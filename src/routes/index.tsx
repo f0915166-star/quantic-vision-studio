@@ -11,7 +11,6 @@ import { HeatmapChart } from "@/components/dashboard/HeatmapChart";
 import { TreemapChart } from "@/components/dashboard/TreemapChart";
 import { ScatterAnalysis } from "@/components/dashboard/ScatterAnalysis";
 import { TopTable } from "@/components/dashboard/TopTable";
-import { MovementTypeDonut } from "@/components/dashboard/MovementTypeDonut";
 import { FilterSidebar } from "@/components/dashboard/FilterSidebar";
 import { Activity, DollarSign, Package, Layers, Filter, Radio } from "lucide-react";
 
@@ -133,11 +132,8 @@ function DashboardShell() {
           <KpiCard label="Bienes únicos" value={fmtCompact(stats.bienes)} sublabel="SKUs activos" icon={<Layers className="w-4 h-4" />} accent="warning" />
         </div>
 
-        {/* ROW 2: trend + donut */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="lg:col-span-2"><TrendChart data={filtered} /></div>
-          <MovementTypeDonut data={filtered} />
-        </div>
+        {/* ROW 2: trend */}
+        <TrendChart data={filtered} />
 
         {/* ROW 3: categoria + treemap */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
