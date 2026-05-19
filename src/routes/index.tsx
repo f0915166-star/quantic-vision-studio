@@ -11,7 +11,6 @@ import { HeatmapChart } from "@/components/dashboard/HeatmapChart";
 import { TreemapChart } from "@/components/dashboard/TreemapChart";
 import { ScatterAnalysis } from "@/components/dashboard/ScatterAnalysis";
 import { TopTable } from "@/components/dashboard/TopTable";
-import { MovementTypeDonut } from "@/components/dashboard/MovementTypeDonut";
 import { FilterSidebar } from "@/components/dashboard/FilterSidebar";
 import { Activity, DollarSign, Package, Layers, Filter, Radio } from "lucide-react";
 
