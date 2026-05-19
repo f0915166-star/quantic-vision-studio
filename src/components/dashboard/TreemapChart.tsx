@@ -32,7 +32,7 @@ export function TreemapChart({ data }: { data: Movement[] }) {
                 )}
               </g>
             );
-          }}>
+          }) as never}>
           <Tooltip
             content={({ active, payload }) => {
               if (!active || !payload?.length) return null;
