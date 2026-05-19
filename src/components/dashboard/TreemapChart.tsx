@@ -17,8 +17,9 @@ export function TreemapChart({ data }: { data: Movement[] }) {
   return (
     <ChartPanel title="Treemap proporcional" subtitle="Tamaño = costo total. Click para filtrar" kicker="Composición">
       <ResponsiveContainer width="100%" height={320}>
-        <Treemap data={tree} dataKey="size" stroke="var(--color-background)" strokeWidth={2}
-          content={(props: unknown) => {
+        <Treemap data={tree} dataKey="size" stroke="var(--color-background)" strokeWidth={2} animationDuration={400}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          content={((props: unknown) => {
             const { x, y, width, height, name, fill, size } = props as { x: number; y: number; width: number; height: number; name: string; fill: string; size: number };
             return (
               <g style={{ cursor: "pointer" }} onClick={() => toggleFilter("categorias", name)}>
