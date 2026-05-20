@@ -42,6 +42,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
           fecha: r[6],
           cantidad: r[7],
           costo: r[8],
+          unidad: p.unidades?.[r[9]] ?? "",
         }));
         setAll(movements);
         setLastUpdated(new Date());
