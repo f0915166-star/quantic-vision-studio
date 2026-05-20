@@ -149,8 +149,6 @@ function DashboardShell() {
           <ResponsableRanking data={filtered} />
         </div>
 
-        {/* ROW 6: Heatmap categoría x mes */}
-        <HeatmapChart data={filtered} />
 
         {/* ROW 6: tabla detalle */}
         <TopTable data={filtered} />
