@@ -3,27 +3,27 @@ import type { Movement } from "@/lib/data-types";
 import { fmtCurrency, useData } from "@/lib/data-store";
 import { ChartPanel } from "./ChartPanel";
 
-// Heatmap: mes (col) x categoria (row), valor = costo
+// Heatmap: mes (col) x concepto (row), valor = COSTO_TOTAL
 export function HeatmapChart({ data }: { data: Movement[] }) {
   const { toggleFilter, filters, setDateRange } = useData();
-  const { months, cats, matrix, max } = useMemo(() => {
+  const { months, rows, matrix, max } = useMemo(() => {
     const monthsSet = new Set<string>();
-    const catsSet = new Set<string>();
-    const m = new Map<string, number>(); // `${cat}|${mes}` -> costo
+    const rowsSet = new Set<string>();
+    const m = new Map<string, number>();
     for (const r of data) {
       const mes = r.fecha?.slice(0, 7);
       if (!mes) continue;
-      monthsSet.add(mes); catsSet.add(r.categoria);
-      const k = `${r.categoria}|${mes}`;
+      monthsSet.add(mes); rowsSet.add(r.concepto);
+      const k = `${r.concepto}|${mes}`;
       m.set(k, (m.get(k) ?? 0) + r.costo);
     }
     const months = Array.from(monthsSet).sort();
-    const cats = Array.from(catsSet).sort();
+    const rows = Array.from(rowsSet).sort();
     let max = 0;
-    const matrix = cats.map(c => months.map(mo => {
+    const matrix = rows.map(c => months.map(mo => {
       const v = m.get(`${c}|${mo}`) ?? 0; if (v > max) max = v; return v;
     }));
-    return { months, cats, matrix, max };
+    return { months, rows, matrix, max };
   }, [data]);
 
   const colorFor = (v: number) => {
@@ -33,10 +33,10 @@ export function HeatmapChart({ data }: { data: Movement[] }) {
   };
 
   return (
-    <ChartPanel title="Mapa de calor — Categoría × Mes" subtitle="Intensidad del costo. Click para filtrar" kicker="Heatmap">
+    <ChartPanel title="Mapa de calor — Concepto × Mes" subtitle="Intensidad del COSTO_TOTAL. Click para filtrar" kicker="Heatmap temporal">
       <div className="overflow-auto -mx-2 px-2">
         <div className="inline-block min-w-full">
-          <div className="grid" style={{ gridTemplateColumns: `160px repeat(${months.length}, minmax(38px, 1fr))` }}>
+          <div className="grid" style={{ gridTemplateColumns: `220px repeat(${months.length}, minmax(38px, 1fr))` }}>
             <div />
             {months.map(mo => (
               <button key={mo}
@@ -50,19 +50,17 @@ export function HeatmapChart({ data }: { data: Movement[] }) {
                 {mo}
               </button>
             ))}
-            {cats.map((c, i) => (
+            {rows.map((c, i) => (
               <div key={c} className="contents">
-                <button onClick={() => toggleFilter("categorias", c)}
-                  className={`text-[10px] font-medium pr-2 py-1 text-right truncate hover:text-primary transition-colors ${filters.categorias.has(c) ? "text-primary" : ""}`}>
+                <button onClick={() => toggleFilter("conceptos", c)}
+                  className={`text-[10px] font-medium pr-2 py-1 text-right truncate hover:text-primary transition-colors ${filters.conceptos.has(c) ? "text-primary" : ""}`}>
                   {c}
                 </button>
                 {months.map((mo, j) => {
                   const v = matrix[i][j];
                   return (
                     <button key={mo} title={`${c} · ${mo}\n${fmtCurrency(v)}`}
-                      onClick={() => {
-                        toggleFilter("categorias", c);
-                      }}
+                      onClick={() => toggleFilter("conceptos", c)}
                       className="aspect-square m-px rounded-[3px] transition-transform hover:scale-110 hover:ring-1 hover:ring-primary relative group"
                       style={{ background: colorFor(v) }}
                     />

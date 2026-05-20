@@ -2,13 +2,16 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "@/lib/data-store";
 import { X, RotateCcw } from "lucide-react";
 
+type Dim = "categorias" | "conceptos" | "areas" | "biens" | "responsables";
+
 export function ActiveFilters() {
   const { filters, toggleFilter, setDateRange, reset } = useData();
-  const items: { dim: "categorias" | "tipos" | "biens" | "responsables"; label: string; value: string }[] = [];
-  filters.categorias.forEach(v => items.push({ dim: "categorias", label: "Categoría", value: v }));
-  filters.tipos.forEach(v => items.push({ dim: "tipos", label: "Tipo", value: v }));
-  filters.biens.forEach(v => items.push({ dim: "biens", label: "Bien", value: v }));
-  filters.responsables.forEach(v => items.push({ dim: "responsables", label: "Responsable", value: v }));
+  const items: { dim: Dim; label: string; value: string }[] = [];
+  filters.categorias.forEach((v: string) => items.push({ dim: "categorias", label: "Categoría", value: v }));
+  filters.conceptos.forEach((v: string) => items.push({ dim: "conceptos", label: "Concepto", value: v }));
+  filters.areas.forEach((v: string) => items.push({ dim: "areas", label: "Área", value: v }));
+  filters.biens.forEach((v: string) => items.push({ dim: "biens", label: "Bien", value: v }));
+  filters.responsables.forEach((v: string) => items.push({ dim: "responsables", label: "Responsable", value: v }));
   const hasDate = filters.dateFrom || filters.dateTo;
   const any = items.length > 0 || hasDate;
   if (!any) return null;

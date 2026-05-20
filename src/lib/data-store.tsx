@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useMemo, useState, useCallback, type ReactNode } from "react";
 import type { DataPayload, FilterState, Movement } from "./data-types";
-import { emptyFilters } from "./data-types";
+import { emptyFilters, deriveArea } from "./data-types";
+
+type Dim = "categorias" | "conceptos" | "areas" | "biens" | "responsables";
 
 interface Ctx {
   loading: boolean;
@@ -8,8 +10,8 @@ interface Ctx {
   all: Movement[];
   filtered: Movement[];
   filters: FilterState;
-  toggleFilter: (dim: keyof Omit<FilterState, "dateFrom" | "dateTo">, value: string) => void;
-  setFilter: (dim: keyof Omit<FilterState, "dateFrom" | "dateTo">, values: string[]) => void;
+  toggleFilter: (dim: Dim, value: string) => void;
+  setFilter: (dim: Dim, values: string[]) => void;
   setDateRange: (from: string | null, to: string | null) => void;
   reset: () => void;
   lastUpdated: Date | null;
@@ -30,15 +32,19 @@ export function DataProvider({ children }: { children: ReactNode }) {
       .then(r => r.json() as Promise<DataPayload>)
       .then(p => {
         if (!alive) return;
-        const movements: Movement[] = p.rows.map(r => ({
-          categoria: p.cats[r[0]],
-          tipo: p.tipos[r[1]],
-          bien: p.biens[r[2]],
-          responsable: p.resps[r[3]],
-          fecha: r[4],
-          cantidad: r[5],
-          costo: r[6],
-        }));
+        const movements: Movement[] = p.rows.map(r => {
+          const concepto = p.tipos[r[1]];
+          return {
+            categoria: p.cats[r[0]],
+            concepto,
+            area: deriveArea(concepto),
+            bien: p.biens[r[2]],
+            responsable: p.resps[r[3]],
+            fecha: r[4],
+            cantidad: r[5],
+            costo: r[6],
+          };
+        });
         setAll(movements);
         setLastUpdated(new Date());
         setLoading(false);
@@ -48,10 +54,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const filtered = useMemo(() => {
-    const { categorias, tipos, biens, responsables, dateFrom, dateTo } = filters;
+    const { categorias, conceptos, areas, biens, responsables, dateFrom, dateTo } = filters;
     return all.filter(m => {
       if (categorias.size && !categorias.has(m.categoria)) return false;
-      if (tipos.size && !tipos.has(m.tipo)) return false;
+      if (conceptos.size && !conceptos.has(m.concepto)) return false;
+      if (areas.size && !areas.has(m.area)) return false;
       if (biens.size && !biens.has(m.bien)) return false;
       if (responsables.size && !responsables.has(m.responsable)) return false;
       if (dateFrom && m.fecha < dateFrom) return false;
@@ -60,7 +67,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     });
   }, [all, filters]);
 
-  const toggleFilter = useCallback((dim: keyof Omit<FilterState, "dateFrom" | "dateTo">, value: string) => {
+  const toggleFilter = useCallback((dim: Dim, value: string) => {
     setFilters(prev => {
       const next = new Set(prev[dim] as Set<string>);
       if (next.has(value)) next.delete(value); else next.add(value);
@@ -68,7 +75,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const setFilter = useCallback((dim: keyof Omit<FilterState, "dateFrom" | "dateTo">, values: string[]) => {
+  const setFilter = useCallback((dim: Dim, values: string[]) => {
     setFilters(prev => ({ ...prev, [dim]: new Set(values) }));
   }, []);
 
