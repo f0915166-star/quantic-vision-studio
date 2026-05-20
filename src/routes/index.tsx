@@ -140,12 +140,15 @@ function DashboardShell() {
         <ActiveFilters />
 
         {/* KPI ROW */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
           <KpiCard label="Costo total" value={fmtCurrency(stats.costo)} sublabel="vs primer semestre" delta={stats.delta} icon={<DollarSign className="w-4 h-4" />} accent="primary" />
+          <KpiCard label="Promedio mensual" value={fmtCurrency(stats.avgMonth)} sublabel={`${stats.monthsCount} meses activos`} icon={<TrendingUp className="w-4 h-4" />} accent="accent" />
+          <KpiCard label="Mes pico" value={stats.peakLabel} sublabel={fmtCurrency(stats.peakVal)} icon={<CalendarRange className="w-4 h-4" />} accent="warning" />
           <KpiCard label="Movimientos" value={fmtCompact(stats.n)} sublabel="registros operativos" icon={<Activity className="w-4 h-4" />} accent="accent" />
           <KpiCard label="Equipos móviles" value={fmtCompact(stats.equipos)} sublabel={`${stats.resps} responsables`} icon={<Truck className="w-4 h-4" />} accent="info" />
           <KpiCard label="Bienes únicos" value={fmtCompact(stats.bienes)} sublabel="SKUs operativos" icon={<Layers className="w-4 h-4" />} accent="warning" />
         </div>
+
 
         {/* ROW 2: tendencia mensual full */}
         <TrendChart data={filtered} />
