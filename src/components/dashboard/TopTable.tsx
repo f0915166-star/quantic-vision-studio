@@ -22,11 +22,12 @@ export function TopTable({ data }: { data: Movement[] }) {
       if (r.concepto) cur.conceptos.set(r.concepto, (cur.conceptos.get(r.concepto) ?? 0) + 1);
       m.set(r.bien, cur);
     }
-    // concepto = el más frecuente para ese bien
+    // concepto = el más frecuente para ese bien; unit = costo unitario promedio
     return Array.from(m.values()).map(x => {
       let top = ""; let best = 0;
       x.conceptos.forEach((v, k) => { if (v > best) { best = v; top = k; } });
-      return { bien: x.bien, concepto: top, cant: x.cant, costo: x.costo, n: x.n };
+      const unit = x.cant > 0 ? x.costo / x.cant : 0;
+      return { bien: x.bien, concepto: top, cant: x.cant, unit, costo: x.costo, n: x.n };
     });
   }, [data]);
 
