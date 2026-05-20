@@ -9,21 +9,36 @@ export function ParetoChart({ data }: { data: Movement[] }) {
   const series = useMemo(() => {
     const m = new Map<string, number>();
     for (const r of data) m.set(r.bien, (m.get(r.bien) ?? 0) + r.costo);
-    const arr = Array.from(m.entries()).map(([bien, costo]) => ({ bien, costo })).sort((a, b) => b.costo - a.costo).slice(0, 15);
+    const arr = Array.from(m.entries())
+      .map(([bien, costo]) => ({ bien, costo }))
+      .sort((a, b) => b.costo - a.costo)
+      .slice(0, 12);
     const total = arr.reduce((s, x) => s + x.costo, 0);
     let acc = 0;
-    return arr.map(x => { acc += x.costo; return { ...x, pct: total ? (acc / total) * 100 : 0, short: x.bien.length > 22 ? x.bien.slice(0, 22) + "…" : x.bien }; });
+    return arr.map(x => {
+      acc += x.costo;
+      const short = x.bien.length > 32 ? x.bien.slice(0, 32) + "…" : x.bien;
+      return { ...x, pct: total ? (acc / total) * 100 : 0, short };
+    });
   }, [data]);
 
   return (
     <ChartPanel title="Análisis Pareto — Top bienes" subtitle="80/20: los pocos vitales del costo total" kicker="Pareto 80/20">
-      <ResponsiveContainer width="100%" height={320}>
-        <ComposedChart data={series} margin={{ top: 10, right: 10, left: 0, bottom: 60 }}>
-          <CartesianGrid stroke="var(--color-grid)" strokeDasharray="2 4" vertical={false} />
-          <XAxis dataKey="short" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false}
-            angle={-35} textAnchor="end" interval={0} height={60} />
-          <YAxis yAxisId="l" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} tickFormatter={fmtCompact} width={55} />
-          <YAxis yAxisId="r" orientation="right" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} tickFormatter={v => `${v}%`} domain={[0, 100]} width={35} />
+      <ResponsiveContainer width="100%" height={Math.max(320, series.length * 30)}>
+        <ComposedChart data={series} layout="vertical" margin={{ top: 8, right: 50, left: 8, bottom: 8 }}>
+          <CartesianGrid stroke="var(--color-grid)" strokeDasharray="2 4" horizontal={false} />
+          <XAxis type="number" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} tickFormatter={fmtCompact} />
+          <XAxis xAxisId="pct" type="number" orientation="top" stroke="var(--color-chart-3)" fontSize={10} tickLine={false} axisLine={false} domain={[0, 100]} tickFormatter={v => `${v}%`} hide />
+          <YAxis
+            type="category"
+            dataKey="short"
+            stroke="var(--color-muted-foreground)"
+            fontSize={10}
+            tickLine={false}
+            axisLine={false}
+            width={230}
+            interval={0}
+          />
           <Tooltip
             cursor={{ fill: "oklch(0.78 0.18 165 / 0.08)" }}
             content={({ active, payload }) => {
@@ -38,14 +53,14 @@ export function ParetoChart({ data }: { data: Movement[] }) {
               );
             }}
           />
-          <Bar yAxisId="l" dataKey="costo" radius={[6, 6, 0, 0]} cursor="pointer"
+          <Bar dataKey="costo" radius={[0, 6, 6, 0]} cursor="pointer" barSize={18}
             onClick={(d) => toggleFilter("biens", (d as { bien: string }).bien)}>
             {series.map(s => (
               <Cell key={s.bien} fill="var(--color-chart-2)"
                 fillOpacity={filters.biens.size === 0 || filters.biens.has(s.bien) ? 1 : 0.25} />
             ))}
           </Bar>
-          <Line yAxisId="r" type="monotone" dataKey="pct" stroke="var(--color-chart-3)" strokeWidth={2}
+          <Line xAxisId="pct" type="monotone" dataKey="pct" stroke="var(--color-chart-3)" strokeWidth={2}
             dot={{ r: 3, fill: "var(--color-chart-3)" }} activeDot={{ r: 5 }} />
         </ComposedChart>
       </ResponsiveContainer>
