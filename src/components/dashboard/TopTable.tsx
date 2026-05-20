@@ -4,7 +4,7 @@ import { fmtCurrency, fmtCompact, useData } from "@/lib/data-store";
 import type { Movement } from "@/lib/data-types";
 import { Search, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
 
-type SortKey = "bien" | "concepto" | "cant" | "unidad" | "costo";
+type SortKey = "bien" | "concepto" | "cant" | "unidad" | "fecha" | "costo";
 
 export function TopTable({ data }: { data: Movement[] }) {
   const { toggleFilter, filters } = useData();
@@ -15,10 +15,11 @@ export function TopTable({ data }: { data: Movement[] }) {
   const PAGE = 10;
 
   const agg = useMemo(() => {
-    const m = new Map<string, { bien: string; concepto: string; cant: number; costo: number; n: number; conceptos: Map<string, number>; unidades: Map<string, number> }>();
+    const m = new Map<string, { bien: string; concepto: string; cant: number; costo: number; n: number; fecha: string; conceptos: Map<string, number>; unidades: Map<string, number> }>();
     for (const r of data) {
-      const cur = m.get(r.bien) ?? { bien: r.bien, concepto: "", cant: 0, costo: 0, n: 0, conceptos: new Map<string, number>(), unidades: new Map<string, number>() };
+      const cur = m.get(r.bien) ?? { bien: r.bien, concepto: "", cant: 0, costo: 0, n: 0, fecha: "", conceptos: new Map<string, number>(), unidades: new Map<string, number>() };
       cur.cant += r.cantidad; cur.costo += r.costo; cur.n += 1;
+      if (r.fecha && r.fecha > cur.fecha) cur.fecha = r.fecha;
       if (r.concepto) cur.conceptos.set(r.concepto, (cur.conceptos.get(r.concepto) ?? 0) + 1);
       if (r.unidad) cur.unidades.set(r.unidad, (cur.unidades.get(r.unidad) ?? 0) + 1);
       m.set(r.bien, cur);
@@ -28,7 +29,7 @@ export function TopTable({ data }: { data: Movement[] }) {
       x.conceptos.forEach((v, k) => { if (v > best) { best = v; top = k; } });
       let uTop = ""; let uBest = 0;
       x.unidades.forEach((v, k) => { if (v > uBest) { uBest = v; uTop = k; } });
-      return { bien: x.bien, concepto: top, cant: x.cant, unidad: uTop, costo: x.costo, n: x.n };
+      return { bien: x.bien, concepto: top, cant: x.cant, unidad: uTop, fecha: x.fecha, costo: x.costo, n: x.n };
     });
   }, [data]);
 
