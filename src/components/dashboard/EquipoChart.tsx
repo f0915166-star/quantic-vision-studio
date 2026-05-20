@@ -19,7 +19,8 @@ export function EquipoChart({ data }: { data: Movement[] }) {
       else cur.repuestos += r.costo;
       m.set(r.equipo, cur);
     }
-    return Array.from(m.values()).sort((a, b) => b.costo - a.costo);
+    return Array.from(m.values()).sort((a, b) => b.costo - a.costo)
+      .map(x => ({ ...x, short: x.equipo.length > 38 ? x.equipo.slice(0, 38) + "…" : x.equipo }));
   }, [data]);
 
   return (
@@ -33,11 +34,11 @@ export function EquipoChart({ data }: { data: Movement[] }) {
           agg.map(r => `"${r.equipo}",${r.combustible.toFixed(2)},${r.repuestos.toFixed(2)},${r.costo.toFixed(2)},${r.n}`).join("\n"),
       })}
     >
-      <ResponsiveContainer width="100%" height={Math.max(280, agg.length * 28)}>
-        <BarChart data={agg} layout="vertical" margin={{ top: 4, right: 24, left: 0, bottom: 0 }} barCategoryGap={4}>
+      <ResponsiveContainer width="100%" height={Math.max(280, agg.length * 32)}>
+        <BarChart data={agg} layout="vertical" margin={{ top: 4, right: 24, left: 0, bottom: 0 }} barCategoryGap={6}>
           <CartesianGrid stroke="var(--color-grid)" strokeDasharray="2 4" horizontal={false} />
           <XAxis type="number" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} tickFormatter={fmtCompact} />
-          <YAxis dataKey="equipo" type="category" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} width={180} />
+          <YAxis dataKey="short" type="category" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} width={280} interval={0} />
           <Tooltip
             cursor={{ fill: "oklch(0.78 0.18 165 / 0.08)" }}
             content={({ active: a, payload }) => {
