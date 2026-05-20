@@ -65,7 +65,7 @@ export function TrendChart({ data }: { data: Movement[] }) {
               const p = payload[0].payload as { costo: number; cantidad: number; n: number };
               return (
                 <div className="panel px-3 py-2 text-xs font-mono">
-                  <div className="text-muted-foreground uppercase tracking-wider text-[10px] mb-1">{label}</div>
+                  <div className="text-muted-foreground uppercase tracking-wider text-[10px] mb-1">{fmtMonthLabel(String(label))}</div>
                   <div className="flex items-center justify-between gap-6">
                     <span>Costo</span><span className="text-primary font-semibold">{fmtCurrency(p.costo)}</span>
                   </div>
