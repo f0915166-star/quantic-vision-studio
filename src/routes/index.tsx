@@ -30,7 +30,7 @@ function DashboardShell() {
   const stats = useMemo(() => {
     const costo = filtered.reduce((s, r) => s + r.costo, 0);
     const bienes = new Set(filtered.map(r => r.bien)).size;
-    const areas = new Set(filtered.map(r => r.area)).size;
+    const equipos = new Set(filtered.map(r => r.equipo)).size;
     const resps = new Set(filtered.map(r => r.responsable)).size;
     const dates = filtered.map(r => r.fecha).filter(Boolean).sort();
     let delta: number | undefined;
@@ -40,7 +40,7 @@ function DashboardShell() {
       for (const r of filtered) (r.fecha < mid ? a += r.costo : b += r.costo);
       if (a > 0) delta = ((b - a) / a) * 100;
     }
-    return { costo, bienes, areas, resps, n: filtered.length, delta };
+    return { costo, bienes, equipos, resps, n: filtered.length, delta };
   }, [filtered]);
 
   if (loading) {
@@ -127,26 +127,29 @@ function DashboardShell() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <KpiCard label="Costo total" value={fmtCurrency(stats.costo)} sublabel="vs primer semestre" delta={stats.delta} icon={<DollarSign className="w-4 h-4" />} accent="primary" />
           <KpiCard label="Movimientos" value={fmtCompact(stats.n)} sublabel="registros operativos" icon={<Activity className="w-4 h-4" />} accent="accent" />
-          <KpiCard label="Áreas activas" value={fmtCompact(stats.areas)} sublabel="áreas responsables" icon={<Building2 className="w-4 h-4" />} accent="info" />
-          <KpiCard label="Bienes únicos" value={fmtCompact(stats.bienes)} sublabel={`${stats.resps} responsables`} icon={<Layers className="w-4 h-4" />} accent="warning" />
+          <KpiCard label="Equipos móviles" value={fmtCompact(stats.equipos)} sublabel={`${stats.resps} responsables`} icon={<Truck className="w-4 h-4" />} accent="info" />
+          <KpiCard label="Bienes únicos" value={fmtCompact(stats.bienes)} sublabel="SKUs operativos" icon={<Layers className="w-4 h-4" />} accent="warning" />
         </div>
 
         {/* ROW 2: tendencia mensual full */}
         <TrendChart data={filtered} />
 
-        {/* ROW 3: Pareto + Treemap (categoría) */}
+        {/* ROW 3: FLOTA — equipo móvil (clave del negocio) */}
+        <EquipoChart data={filtered} />
+
+        {/* ROW 4: Pareto + Treemap (bienes y categorías) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <ParetoChart data={filtered} />
           <TreemapChart data={filtered} />
         </div>
 
-        {/* ROW 4: Área + Responsables */}
+        {/* ROW 5: Área + Responsables */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <AreaResponsableChart data={filtered} />
           <ResponsableRanking data={filtered} />
         </div>
 
-        {/* ROW 5: Heatmap concepto x mes */}
+        {/* ROW 6: Heatmap categoría x mes */}
         <HeatmapChart data={filtered} />
 
         {/* ROW 6: tabla detalle */}
