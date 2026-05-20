@@ -40,8 +40,24 @@ function DashboardShell() {
       for (const r of filtered) (r.fecha < mid ? a += r.costo : b += r.costo);
       if (a > 0) delta = ((b - a) / a) * 100;
     }
-    return { costo, bienes, equipos, resps, n: filtered.length, delta };
+    // Mes pico + promedio mensual
+    const MES_ABBR = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+    const monthly = new Map<string, number>();
+    for (const r of filtered) {
+      const k = r.fecha?.slice(0, 7);
+      if (!k) continue;
+      monthly.set(k, (monthly.get(k) ?? 0) + r.costo);
+    }
+    const monthsCount = monthly.size;
+    const avgMonth = monthsCount ? costo / monthsCount : 0;
+    let peakKey = ""; let peakVal = 0;
+    monthly.forEach((v, k) => { if (v > peakVal) { peakVal = v; peakKey = k; } });
+    const peakLabel = peakKey
+      ? `${MES_ABBR[Number(peakKey.slice(5, 7)) - 1]} ${peakKey.slice(2, 4)}`
+      : "—";
+    return { costo, bienes, equipos, resps, n: filtered.length, delta, avgMonth, monthsCount, peakLabel, peakVal };
   }, [filtered]);
+
 
   if (loading) {
     return (
