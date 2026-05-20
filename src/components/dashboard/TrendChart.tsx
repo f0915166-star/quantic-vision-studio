@@ -53,7 +53,8 @@ export function TrendChart({ data }: { data: Movement[] }) {
             </linearGradient>
           </defs>
           <CartesianGrid stroke="var(--color-grid)" strokeDasharray="2 4" vertical={false} />
-          <XAxis dataKey="mes" stroke="var(--color-muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
+          <XAxis dataKey="mes" stroke="var(--color-muted-foreground)" fontSize={11} tickLine={false} axisLine={false}
+            interval={0} angle={-45} textAnchor="end" height={50} tickMargin={8} tickFormatter={fmtMonthLabel} />
           <YAxis stroke="var(--color-muted-foreground)" fontSize={11} tickLine={false} axisLine={false} tickFormatter={fmtCompact} width={50} />
           <ReferenceLine y={avg} stroke="var(--color-muted-foreground)" strokeDasharray="4 4" strokeOpacity={0.5}
             label={{ value: `Promedio ${fmtCompact(avg)}`, fill: "var(--color-muted-foreground)", fontSize: 10, position: "insideTopRight" }} />
