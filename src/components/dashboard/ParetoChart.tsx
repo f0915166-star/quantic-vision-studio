@@ -45,7 +45,7 @@ export function ParetoChart({ data }: { data: Movement[] }) {
               const selected = filters.biens.has(s.bien);
               return (
                 <Cell key={s.bien}
-                  fill={isMax || selected ? "var(--color-chart-3)" : "var(--color-chart-2)"}
+                  fill={isMax || selected ? "var(--color-chart-4)" : "var(--color-chart-2)"}
                   fillOpacity={filters.biens.size === 0 || selected ? 1 : 0.25} />
               );
             })}
