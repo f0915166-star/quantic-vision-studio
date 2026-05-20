@@ -5,6 +5,12 @@ import { fmtCompact, fmtCurrency, useData } from "@/lib/data-store";
 import { ChartPanel } from "./ChartPanel";
 
 function monthKey(d: string) { return d.slice(0, 7); }
+const MES_ABBR = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+function fmtMonthLabel(k: string) {
+  const [y, m] = k.split("-").map(Number);
+  if (!y || !m) return k;
+  return `${MES_ABBR[m - 1]} ${String(y).slice(2)}`;
+}
 
 export function TrendChart({ data }: { data: Movement[] }) {
   const { setDateRange, filters } = useData();
@@ -28,8 +34,8 @@ export function TrendChart({ data }: { data: Movement[] }) {
       subtitle="Click en un mes para filtrar el periodo"
       kicker="Time series"
     >
-      <ResponsiveContainer width="100%" height={280}>
-        <AreaChart data={series} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+      <ResponsiveContainer width="100%" height={300}>
+        <AreaChart data={series} margin={{ top: 10, right: 10, left: 0, bottom: 28 }}
           onClick={(e) => {
             const m = (e as { activeLabel?: string })?.activeLabel;
             if (!m) return;
@@ -47,7 +53,8 @@ export function TrendChart({ data }: { data: Movement[] }) {
             </linearGradient>
           </defs>
           <CartesianGrid stroke="var(--color-grid)" strokeDasharray="2 4" vertical={false} />
-          <XAxis dataKey="mes" stroke="var(--color-muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
+          <XAxis dataKey="mes" stroke="var(--color-muted-foreground)" fontSize={11} tickLine={false} axisLine={false}
+            interval={0} angle={-45} textAnchor="end" height={50} tickMargin={8} tickFormatter={fmtMonthLabel} />
           <YAxis stroke="var(--color-muted-foreground)" fontSize={11} tickLine={false} axisLine={false} tickFormatter={fmtCompact} width={50} />
           <ReferenceLine y={avg} stroke="var(--color-muted-foreground)" strokeDasharray="4 4" strokeOpacity={0.5}
             label={{ value: `Promedio ${fmtCompact(avg)}`, fill: "var(--color-muted-foreground)", fontSize: 10, position: "insideTopRight" }} />
@@ -58,7 +65,7 @@ export function TrendChart({ data }: { data: Movement[] }) {
               const p = payload[0].payload as { costo: number; cantidad: number; n: number };
               return (
                 <div className="panel px-3 py-2 text-xs font-mono">
-                  <div className="text-muted-foreground uppercase tracking-wider text-[10px] mb-1">{label}</div>
+                  <div className="text-muted-foreground uppercase tracking-wider text-[10px] mb-1">{fmtMonthLabel(String(label))}</div>
                   <div className="flex items-center justify-between gap-6">
                     <span>Costo</span><span className="text-primary font-semibold">{fmtCurrency(p.costo)}</span>
                   </div>

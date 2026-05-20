@@ -39,23 +39,32 @@ export function HeatmapChart({ data }: { data: Movement[] }) {
     return `oklch(${0.3 + t * 0.45} ${0.05 + t * 0.18} ${165 - t * 30})`;
   };
 
+  const MES_ABBR = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+  const labelFor = (k: string) => {
+    const [y, mo] = k.split("-").map(Number);
+    return y && mo ? `${MES_ABBR[mo - 1]} ${String(y).slice(2)}` : k;
+  };
+
   return (
     <ChartPanel title="Mapa de calor — Categoría × Mes" subtitle="Intensidad del COSTO_TOTAL por mes. Click en una categoría o mes para filtrar" kicker="Heatmap temporal">
       <div className="overflow-auto -mx-2 px-2">
         <div className="inline-block min-w-full">
-          <div className="grid" style={{ gridTemplateColumns: `200px repeat(${months.length}, minmax(34px, 1fr))` }}>
-            <div />
+          {/* Header de meses con rotación contenida */}
+          <div className="grid" style={{ gridTemplateColumns: `220px repeat(${months.length}, minmax(38px, 1fr))` }}>
+            <div className="h-16" />
             {months.map(mo => (
-              <button key={mo}
-                onClick={() => {
-                  const [y, m] = mo.split("-").map(Number);
-                  const last = new Date(y, m, 0).getDate();
-                  setDateRange(`${mo}-01`, `${mo}-${String(last).padStart(2, "0")}`);
-                }}
-                className="text-[9px] text-muted-foreground font-mono text-center py-1 hover:text-foreground transition-colors -rotate-90 origin-center"
-                style={{ writingMode: "horizontal-tb" }}>
-                {mo}
-              </button>
+              <div key={mo} className="h-16 flex items-end justify-center pb-1">
+                <button
+                  onClick={() => {
+                    const [y, m] = mo.split("-").map(Number);
+                    const last = new Date(y, m, 0).getDate();
+                    setDateRange(`${mo}-01`, `${mo}-${String(last).padStart(2, "0")}`);
+                  }}
+                  className="text-[10px] text-muted-foreground font-mono font-semibold whitespace-nowrap hover:text-primary transition-colors origin-bottom-left"
+                  style={{ transform: "rotate(-55deg) translateX(4px)" }}>
+                  {labelFor(mo)}
+                </button>
+              </div>
             ))}
             {rows.map((c, i) => (
               <div key={c} className="contents">
@@ -66,7 +75,7 @@ export function HeatmapChart({ data }: { data: Movement[] }) {
                 {months.map((mo, j) => {
                   const v = matrix[i][j];
                   return (
-                    <button key={mo} title={`${c} · ${mo}\n${fmtCurrency(v)}`}
+                    <button key={mo} title={`${c} · ${labelFor(mo)}\n${fmtCurrency(v)}`}
                       onClick={() => toggleFilter("categorias", c)}
                       className="aspect-square m-px rounded-[3px] transition-transform hover:scale-110 hover:ring-1 hover:ring-primary relative group"
                       style={{ background: colorFor(v) }}
