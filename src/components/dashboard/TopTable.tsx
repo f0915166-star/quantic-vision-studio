@@ -4,7 +4,7 @@ import { fmtCurrency, fmtCompact, useData } from "@/lib/data-store";
 import type { Movement } from "@/lib/data-types";
 import { Search, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
 
-type SortKey = "bien" | "concepto" | "cant" | "unidad" | "costo";
+type SortKey = "bien" | "concepto" | "cant" | "unidad" | "fecha" | "costo";
 
 export function TopTable({ data }: { data: Movement[] }) {
   const { toggleFilter, filters } = useData();
@@ -15,10 +15,11 @@ export function TopTable({ data }: { data: Movement[] }) {
   const PAGE = 10;
 
   const agg = useMemo(() => {
-    const m = new Map<string, { bien: string; concepto: string; cant: number; costo: number; n: number; conceptos: Map<string, number>; unidades: Map<string, number> }>();
+    const m = new Map<string, { bien: string; concepto: string; cant: number; costo: number; n: number; fecha: string; conceptos: Map<string, number>; unidades: Map<string, number> }>();
     for (const r of data) {
-      const cur = m.get(r.bien) ?? { bien: r.bien, concepto: "", cant: 0, costo: 0, n: 0, conceptos: new Map<string, number>(), unidades: new Map<string, number>() };
+      const cur = m.get(r.bien) ?? { bien: r.bien, concepto: "", cant: 0, costo: 0, n: 0, fecha: "", conceptos: new Map<string, number>(), unidades: new Map<string, number>() };
       cur.cant += r.cantidad; cur.costo += r.costo; cur.n += 1;
+      if (r.fecha && r.fecha > cur.fecha) cur.fecha = r.fecha;
       if (r.concepto) cur.conceptos.set(r.concepto, (cur.conceptos.get(r.concepto) ?? 0) + 1);
       if (r.unidad) cur.unidades.set(r.unidad, (cur.unidades.get(r.unidad) ?? 0) + 1);
       m.set(r.bien, cur);
@@ -28,7 +29,7 @@ export function TopTable({ data }: { data: Movement[] }) {
       x.conceptos.forEach((v, k) => { if (v > best) { best = v; top = k; } });
       let uTop = ""; let uBest = 0;
       x.unidades.forEach((v, k) => { if (v > uBest) { uBest = v; uTop = k; } });
-      return { bien: x.bien, concepto: top, cant: x.cant, unidad: uTop, costo: x.costo, n: x.n };
+      return { bien: x.bien, concepto: top, cant: x.cant, unidad: uTop, fecha: x.fecha, costo: x.costo, n: x.n };
     });
   }, [data]);
 
@@ -63,7 +64,7 @@ export function TopTable({ data }: { data: Movement[] }) {
       kicker="Detalle operativo"
       exportData={() => ({
         filename: "ranking_bienes.csv",
-        csv: "bien,concepto,cantidad,unidad,costo_total\n" + sorted.map(r => `"${r.bien.replace(/"/g, '""')}","${r.concepto.replace(/"/g, '""')}",${r.cant},${r.unidad},${r.costo}`).join("\n"),
+        csv: "bien,concepto,cantidad,unidad,ultima_fecha,costo_total\n" + sorted.map(r => `"${r.bien.replace(/"/g, '""')}","${r.concepto.replace(/"/g, '""')}",${r.cant},${r.unidad},${r.fecha},${r.costo}`).join("\n"),
       })}
       actions={
         <div className="relative mr-1">
@@ -77,7 +78,7 @@ export function TopTable({ data }: { data: Movement[] }) {
         <table className="w-full text-xs">
           <thead>
             <tr className="text-left text-[10px] uppercase tracking-[0.12em] text-muted-foreground border-b border-border">
-              {([["bien", "Bien"], ["concepto", "Concepto"], ["cant", "Cantidad"], ["unidad", "Unidad"], ["costo", "Costo total"]] as [SortKey, string][]).map(([k, l]) => (
+              {([["bien", "Bien"], ["concepto", "Concepto"], ["cant", "Cantidad"], ["unidad", "Unidad"], ["fecha", "Última fecha"], ["costo", "Costo total"]] as [SortKey, string][]).map(([k, l]) => (
                 <th key={k} className="py-2 px-2 font-medium">
                   <button onClick={() => setSort(k)} className="inline-flex items-center gap-1 hover:text-foreground transition-colors">
                     {l} <ArrowUpDown className={`w-3 h-3 ${sortKey === k ? "text-primary" : "opacity-40"}`} />
@@ -97,6 +98,7 @@ export function TopTable({ data }: { data: Movement[] }) {
                   <td className="py-2 px-2 text-muted-foreground max-w-[280px] truncate" title={r.concepto}>{r.concepto}</td>
                   <td className="py-2 px-2 font-mono tabular-nums">{fmtCompact(r.cant)}</td>
                   <td className="py-2 px-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{r.unidad}</td>
+                  <td className="py-2 px-2 font-mono tabular-nums text-muted-foreground">{r.fecha || "—"}</td>
                   <td className="py-2 px-2 font-mono tabular-nums text-primary">{fmtCurrency(r.costo)}</td>
                 </tr>
               );
