@@ -5,6 +5,12 @@ import { fmtCompact, fmtCurrency, useData } from "@/lib/data-store";
 import { ChartPanel } from "./ChartPanel";
 
 function monthKey(d: string) { return d.slice(0, 7); }
+const MES_ABBR = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+function fmtMonthLabel(k: string) {
+  const [y, m] = k.split("-").map(Number);
+  if (!y || !m) return k;
+  return `${MES_ABBR[m - 1]} ${String(y).slice(2)}`;
+}
 
 export function TrendChart({ data }: { data: Movement[] }) {
   const { setDateRange, filters } = useData();
