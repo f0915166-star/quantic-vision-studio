@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 interface Props {
   title: string;
   subtitle?: string;
-  kicker?: string;
+  kicker?: ReactNode;
   children: ReactNode;
   actions?: ReactNode;
   exportData?: () => { filename: string; csv: string };

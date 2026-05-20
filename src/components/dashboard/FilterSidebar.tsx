@@ -1,24 +1,24 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "@/lib/data-store";
-import { Filter, Calendar, Tags, Users, Boxes, Building2, ChevronDown, X } from "lucide-react";
+import { Filter, Calendar, Tags, Users, Truck, Building2, ChevronDown, X } from "lucide-react";
 
-type SectionKey = "cat" | "concepto" | "area" | "resp";
+type SectionKey = "cat" | "equipo" | "area" | "resp";
 
 export function FilterSidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { all, filters, toggleFilter, setDateRange } = useData();
-  const [section, setSection] = useState<SectionKey | null>("cat");
+  const [section, setSection] = useState<SectionKey | null>("equipo");
 
   const counts = useMemo(() => {
     const c = {
       cats: new Map<string, number>(),
-      conceptos: new Map<string, number>(),
+      equipos: new Map<string, number>(),
       areas: new Map<string, number>(),
       resps: new Map<string, number>(),
     };
     for (const r of all) {
       c.cats.set(r.categoria, (c.cats.get(r.categoria) ?? 0) + 1);
-      c.conceptos.set(r.concepto, (c.conceptos.get(r.concepto) ?? 0) + 1);
+      c.equipos.set(r.equipo, (c.equipos.get(r.equipo) ?? 0) + 1);
       c.areas.set(r.area, (c.areas.get(r.area) ?? 0) + 1);
       c.resps.set(r.responsable, (c.resps.get(r.responsable) ?? 0) + 1);
     }
@@ -68,13 +68,13 @@ export function FilterSidebar({ open, onClose }: { open: boolean; onClose: () =>
             </div>
 
             <div className="flex-1 overflow-y-auto">
+              <Section icon={<Truck className="w-3 h-3" />} label="Equipo móvil" open={section === "equipo"} onToggle={() => setSection(s => s === "equipo" ? null : "equipo")}
+                count={filters.equipos.size}>
+                <Chips items={sortFn(counts.equipos)} active={filters.equipos} onToggle={v => toggleFilter("equipos", v)} />
+              </Section>
               <Section icon={<Tags className="w-3 h-3" />} label="Categoría" open={section === "cat"} onToggle={() => setSection(s => s === "cat" ? null : "cat")}
                 count={filters.categorias.size}>
                 <Chips items={sortFn(counts.cats)} active={filters.categorias} onToggle={v => toggleFilter("categorias", v)} />
-              </Section>
-              <Section icon={<Boxes className="w-3 h-3" />} label="Concepto" open={section === "concepto"} onToggle={() => setSection(s => s === "concepto" ? null : "concepto")}
-                count={filters.conceptos.size}>
-                <Chips items={sortFn(counts.conceptos)} active={filters.conceptos} onToggle={v => toggleFilter("conceptos", v)} />
               </Section>
               <Section icon={<Building2 className="w-3 h-3" />} label="Área responsable" open={section === "area"} onToggle={() => setSection(s => s === "area" ? null : "area")}
                 count={filters.areas.size}>
@@ -120,7 +120,7 @@ function Chips({ items, active, onToggle }: { items: [string, number][]; active:
       {items.map(([v, n]) => (
         <button key={v} onClick={() => onToggle(v)}
           className={`chip ${active.has(v) ? "chip-active" : ""} hover:border-primary/50 max-w-full`}>
-          <span className="truncate max-w-[180px]">{v || "(sin valor)"}</span>
+          <span className="truncate max-w-[220px]">{v || "(sin valor)"}</span>
           <span className="text-[10px] opacity-60 font-mono">{n}</span>
         </button>
       ))}

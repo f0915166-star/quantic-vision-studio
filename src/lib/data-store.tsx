@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useMemo, useState, useCallback, type ReactNode } from "react";
 import type { DataPayload, FilterState, Movement } from "./data-types";
-import { emptyFilters, deriveArea } from "./data-types";
+import { emptyFilters } from "./data-types";
 
-type Dim = "categorias" | "conceptos" | "areas" | "biens" | "responsables";
+type Dim = "categorias" | "areas" | "equipos" | "biens" | "responsables";
 
 interface Ctx {
   loading: boolean;
@@ -32,19 +32,17 @@ export function DataProvider({ children }: { children: ReactNode }) {
       .then(r => r.json() as Promise<DataPayload>)
       .then(p => {
         if (!alive) return;
-        const movements: Movement[] = p.rows.map(r => {
-          const concepto = p.tipos[r[1]];
-          return {
-            categoria: p.cats[r[0]],
-            concepto,
-            area: deriveArea(concepto),
-            bien: p.biens[r[2]],
-            responsable: p.resps[r[3]],
-            fecha: r[4],
-            cantidad: r[5],
-            costo: r[6],
-          };
-        });
+        const movements: Movement[] = p.rows.map(r => ({
+          categoria: p.cats[r[0]],
+          area: p.areas[r[1]],
+          bien: p.biens[r[2]],
+          responsable: p.resps[r[3]],
+          equipo: p.equipos[r[4]],
+          concepto: p.conceptos[r[5]],
+          fecha: r[6],
+          cantidad: r[7],
+          costo: r[8],
+        }));
         setAll(movements);
         setLastUpdated(new Date());
         setLoading(false);
@@ -54,11 +52,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const filtered = useMemo(() => {
-    const { categorias, conceptos, areas, biens, responsables, dateFrom, dateTo } = filters;
+    const { categorias, areas, equipos, biens, responsables, dateFrom, dateTo } = filters;
     return all.filter(m => {
       if (categorias.size && !categorias.has(m.categoria)) return false;
-      if (conceptos.size && !conceptos.has(m.concepto)) return false;
       if (areas.size && !areas.has(m.area)) return false;
+      if (equipos.size && !equipos.has(m.equipo)) return false;
       if (biens.size && !biens.has(m.bien)) return false;
       if (responsables.size && !responsables.has(m.responsable)) return false;
       if (dateFrom && m.fecha < dateFrom) return false;
