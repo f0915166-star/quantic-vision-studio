@@ -1,17 +1,25 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "@/lib/data-store";
-import { Filter, Calendar, Tags, Users, Boxes, ChevronDown, X } from "lucide-react";
+import { Filter, Calendar, Tags, Users, Boxes, Building2, ChevronDown, X } from "lucide-react";
+
+type SectionKey = "cat" | "concepto" | "area" | "resp";
 
 export function FilterSidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { all, filters, toggleFilter, setDateRange } = useData();
-  const [section, setSection] = useState<"cat" | "tipo" | "resp" | null>("cat");
+  const [section, setSection] = useState<SectionKey | null>("cat");
 
   const counts = useMemo(() => {
-    const c = { cats: new Map<string, number>(), tipos: new Map<string, number>(), resps: new Map<string, number>() };
+    const c = {
+      cats: new Map<string, number>(),
+      conceptos: new Map<string, number>(),
+      areas: new Map<string, number>(),
+      resps: new Map<string, number>(),
+    };
     for (const r of all) {
       c.cats.set(r.categoria, (c.cats.get(r.categoria) ?? 0) + 1);
-      c.tipos.set(r.tipo, (c.tipos.get(r.tipo) ?? 0) + 1);
+      c.conceptos.set(r.concepto, (c.conceptos.get(r.concepto) ?? 0) + 1);
+      c.areas.set(r.area, (c.areas.get(r.area) ?? 0) + 1);
       c.resps.set(r.responsable, (c.resps.get(r.responsable) ?? 0) + 1);
     }
     return c;
@@ -47,7 +55,7 @@ export function FilterSidebar({ open, onClose }: { open: boolean; onClose: () =>
 
             <div className="p-4 border-b border-border space-y-2">
               <div className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-semibold flex items-center gap-1.5">
-                <Calendar className="w-3 h-3" /> Periodo
+                <Calendar className="w-3 h-3" /> Periodo (FECHA_MOVIMIENTO)
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <input type="date" value={filters.dateFrom ?? ""}
@@ -64,13 +72,17 @@ export function FilterSidebar({ open, onClose }: { open: boolean; onClose: () =>
                 count={filters.categorias.size}>
                 <Chips items={sortFn(counts.cats)} active={filters.categorias} onToggle={v => toggleFilter("categorias", v)} />
               </Section>
-              <Section icon={<Boxes className="w-3 h-3" />} label="Tipo de movimiento" open={section === "tipo"} onToggle={() => setSection(s => s === "tipo" ? null : "tipo")}
-                count={filters.tipos.size}>
-                <Chips items={sortFn(counts.tipos)} active={filters.tipos} onToggle={v => toggleFilter("tipos", v)} />
+              <Section icon={<Boxes className="w-3 h-3" />} label="Concepto" open={section === "concepto"} onToggle={() => setSection(s => s === "concepto" ? null : "concepto")}
+                count={filters.conceptos.size}>
+                <Chips items={sortFn(counts.conceptos)} active={filters.conceptos} onToggle={v => toggleFilter("conceptos", v)} />
+              </Section>
+              <Section icon={<Building2 className="w-3 h-3" />} label="Área responsable" open={section === "area"} onToggle={() => setSection(s => s === "area" ? null : "area")}
+                count={filters.areas.size}>
+                <Chips items={sortFn(counts.areas)} active={filters.areas} onToggle={v => toggleFilter("areas", v)} />
               </Section>
               <Section icon={<Users className="w-3 h-3" />} label="Responsable" open={section === "resp"} onToggle={() => setSection(s => s === "resp" ? null : "resp")}
                 count={filters.responsables.size}>
-                <Chips items={sortFn(counts.resps).slice(0, 50)} active={filters.responsables} onToggle={v => toggleFilter("responsables", v)} />
+                <Chips items={sortFn(counts.resps).slice(0, 60)} active={filters.responsables} onToggle={v => toggleFilter("responsables", v)} />
               </Section>
             </div>
           </motion.aside>
