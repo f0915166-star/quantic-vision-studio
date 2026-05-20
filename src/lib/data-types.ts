@@ -1,5 +1,5 @@
-// rows: [catIdx, areaIdx, bienIdx, respIdx, equipoIdx, conceptoIdx, fecha, cantidad, costo]
-export type RawRow = [number, number, number, number, number, number, string, number, number];
+// rows: [catIdx, areaIdx, bienIdx, respIdx, equipoIdx, conceptoIdx, fecha, cantidad, costo, unidadIdx]
+export type RawRow = [number, number, number, number, number, number, string, number, number, number];
 
 export interface DataPayload {
   cats: string[];
@@ -8,11 +8,12 @@ export interface DataPayload {
   resps: string[];
   equipos: string[];
   conceptos: string[];
+  unidades: string[];
   rows: RawRow[];
   meta?: { generated: string; n: number };
 }
 
-// Esquema de negocio: BIEN · CATEGORIA · FECHA_MOVIMIENTO · COSTO_TOTAL · CONCEPTO · AREA_RESPONSABLE · RESPONSABLE
+// Esquema de negocio: BIEN · CATEGORIA · FECHA_MOVIMIENTO · COSTO_TOTAL · CONCEPTO · AREA_RESPONSABLE · RESPONSABLE · UNIDAD_MEDIDA
 // + EQUIPO derivado de CONCEPTO (clave para análisis de flota móvil)
 export interface Movement {
   categoria: string;
@@ -24,6 +25,7 @@ export interface Movement {
   fecha: string;
   cantidad: number;
   costo: number;
+  unidad: string;
 }
 
 export interface FilterState {
