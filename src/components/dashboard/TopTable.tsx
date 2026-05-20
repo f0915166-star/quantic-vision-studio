@@ -4,7 +4,7 @@ import { fmtCurrency, fmtCompact, useData } from "@/lib/data-store";
 import type { Movement } from "@/lib/data-types";
 import { Search, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
 
-type SortKey = "bien" | "concepto" | "cant" | "costo" | "n";
+type SortKey = "bien" | "concepto" | "cant" | "unit" | "costo";
 
 export function TopTable({ data }: { data: Movement[] }) {
   const { toggleFilter, filters } = useData();
@@ -22,11 +22,12 @@ export function TopTable({ data }: { data: Movement[] }) {
       if (r.concepto) cur.conceptos.set(r.concepto, (cur.conceptos.get(r.concepto) ?? 0) + 1);
       m.set(r.bien, cur);
     }
-    // concepto = el más frecuente para ese bien
+    // concepto = el más frecuente para ese bien; unit = costo unitario promedio
     return Array.from(m.values()).map(x => {
       let top = ""; let best = 0;
       x.conceptos.forEach((v, k) => { if (v > best) { best = v; top = k; } });
-      return { bien: x.bien, concepto: top, cant: x.cant, costo: x.costo, n: x.n };
+      const unit = x.cant > 0 ? x.costo / x.cant : 0;
+      return { bien: x.bien, concepto: top, cant: x.cant, unit, costo: x.costo, n: x.n };
     });
   }, [data]);
 
@@ -61,7 +62,7 @@ export function TopTable({ data }: { data: Movement[] }) {
       kicker="Detalle operativo"
       exportData={() => ({
         filename: "ranking_bienes.csv",
-        csv: "bien,concepto,cantidad,costo,movimientos\n" + sorted.map(r => `"${r.bien.replace(/"/g, '""')}","${r.concepto.replace(/"/g, '""')}",${r.cant},${r.costo},${r.n}`).join("\n"),
+        csv: "bien,concepto,cantidad,costo_unitario,costo_total\n" + sorted.map(r => `"${r.bien.replace(/"/g, '""')}","${r.concepto.replace(/"/g, '""')}",${r.cant},${r.unit.toFixed(2)},${r.costo}`).join("\n"),
       })}
       actions={
         <div className="relative mr-1">
@@ -75,7 +76,7 @@ export function TopTable({ data }: { data: Movement[] }) {
         <table className="w-full text-xs">
           <thead>
             <tr className="text-left text-[10px] uppercase tracking-[0.12em] text-muted-foreground border-b border-border">
-              {([["bien", "Bien / Unidad"], ["concepto", "Concepto"], ["cant", "Cantidad"], ["costo", "Costo total"], ["n", "Movs"]] as [SortKey, string][]).map(([k, l]) => (
+              {([["bien", "Bien"], ["concepto", "Concepto"], ["cant", "Cantidad"], ["unit", "Costo unit."], ["costo", "Costo total"]] as [SortKey, string][]).map(([k, l]) => (
                 <th key={k} className="py-2 px-2 font-medium">
                   <button onClick={() => setSort(k)} className="inline-flex items-center gap-1 hover:text-foreground transition-colors">
                     {l} <ArrowUpDown className={`w-3 h-3 ${sortKey === k ? "text-primary" : "opacity-40"}`} />
@@ -94,8 +95,8 @@ export function TopTable({ data }: { data: Movement[] }) {
                   <td className="py-2 px-2 w-[420px] max-w-[460px] truncate font-medium" title={r.bien}>{r.bien}</td>
                   <td className="py-2 px-2 text-muted-foreground max-w-[280px] truncate" title={r.concepto}>{r.concepto}</td>
                   <td className="py-2 px-2 font-mono tabular-nums">{fmtCompact(r.cant)}</td>
+                  <td className="py-2 px-2 font-mono tabular-nums text-muted-foreground">{fmtCurrency(r.unit)}</td>
                   <td className="py-2 px-2 font-mono tabular-nums text-primary">{fmtCurrency(r.costo)}</td>
-                  <td className="py-2 px-2 font-mono tabular-nums text-muted-foreground">{r.n}</td>
                 </tr>
               );
             })}
