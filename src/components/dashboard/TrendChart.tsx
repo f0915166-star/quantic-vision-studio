@@ -35,7 +35,7 @@ export function TrendChart({ data }: { data: Movement[] }) {
       kicker="Time series"
     >
       <ResponsiveContainer width="100%" height={300}>
-        <AreaChart data={series} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+        <AreaChart data={series} margin={{ top: 10, right: 10, left: 0, bottom: 28 }}
           onClick={(e) => {
             const m = (e as { activeLabel?: string })?.activeLabel;
             if (!m) return;
