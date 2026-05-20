@@ -34,7 +34,7 @@ export function TrendChart({ data }: { data: Movement[] }) {
       subtitle="Click en un mes para filtrar el periodo"
       kicker="Time series"
     >
-      <ResponsiveContainer width="100%" height={280}>
+      <ResponsiveContainer width="100%" height={300}>
         <AreaChart data={series} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
           onClick={(e) => {
             const m = (e as { activeLabel?: string })?.activeLabel;
