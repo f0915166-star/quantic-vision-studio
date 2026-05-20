@@ -77,7 +77,7 @@ export function TopTable({ data }: { data: Movement[] }) {
         <table className="w-full text-xs">
           <thead>
             <tr className="text-left text-[10px] uppercase tracking-[0.12em] text-muted-foreground border-b border-border">
-              {([["bien", "Bien"], ["concepto", "Concepto"], ["cant", "Cantidad"], ["unit", "Costo unit."], ["costo", "Costo total"]] as [SortKey, string][]).map(([k, l]) => (
+              {([["bien", "Bien"], ["concepto", "Concepto"], ["cant", "Cantidad"], ["unidad", "Unidad"], ["costo", "Costo total"]] as [SortKey, string][]).map(([k, l]) => (
                 <th key={k} className="py-2 px-2 font-medium">
                   <button onClick={() => setSort(k)} className="inline-flex items-center gap-1 hover:text-foreground transition-colors">
                     {l} <ArrowUpDown className={`w-3 h-3 ${sortKey === k ? "text-primary" : "opacity-40"}`} />
