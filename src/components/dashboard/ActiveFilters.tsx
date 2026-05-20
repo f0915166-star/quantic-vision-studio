@@ -2,14 +2,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "@/lib/data-store";
 import { X, RotateCcw } from "lucide-react";
 
-type Dim = "categorias" | "conceptos" | "areas" | "biens" | "responsables";
+type Dim = "categorias" | "areas" | "equipos" | "biens" | "responsables";
 
 export function ActiveFilters() {
   const { filters, toggleFilter, setDateRange, reset } = useData();
   const items: { dim: Dim; label: string; value: string }[] = [];
   filters.categorias.forEach((v: string) => items.push({ dim: "categorias", label: "Categoría", value: v }));
-  filters.conceptos.forEach((v: string) => items.push({ dim: "conceptos", label: "Concepto", value: v }));
   filters.areas.forEach((v: string) => items.push({ dim: "areas", label: "Área", value: v }));
+  filters.equipos.forEach((v: string) => items.push({ dim: "equipos", label: "Equipo", value: v }));
   filters.biens.forEach((v: string) => items.push({ dim: "biens", label: "Bien", value: v }));
   filters.responsables.forEach((v: string) => items.push({ dim: "responsables", label: "Responsable", value: v }));
   const hasDate = filters.dateFrom || filters.dateTo;
@@ -35,7 +35,7 @@ export function ActiveFilters() {
             className="chip chip-active hover:bg-primary/30 group"
           >
             <span className="opacity-70 text-[10px]">{it.label}:</span>
-            <span className="font-medium truncate max-w-[180px]">{it.value || "(sin valor)"}</span>
+            <span className="font-medium truncate max-w-[200px]">{it.value || "(sin valor)"}</span>
             <X className="w-3 h-3 opacity-60 group-hover:opacity-100" />
           </motion.button>
         ))}
