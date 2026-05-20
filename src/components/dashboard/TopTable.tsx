@@ -4,7 +4,7 @@ import { fmtCurrency, fmtCompact, useData } from "@/lib/data-store";
 import type { Movement } from "@/lib/data-types";
 import { Search, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
 
-type SortKey = "bien" | "categoria" | "cant" | "costo" | "n";
+type SortKey = "bien" | "concepto" | "cant" | "costo" | "n";
 
 export function TopTable({ data }: { data: Movement[] }) {
   const { toggleFilter, filters } = useData();
@@ -15,18 +15,24 @@ export function TopTable({ data }: { data: Movement[] }) {
   const PAGE = 10;
 
   const agg = useMemo(() => {
-    const m = new Map<string, { bien: string; categoria: string; cant: number; costo: number; n: number }>();
+    const m = new Map<string, { bien: string; concepto: string; cant: number; costo: number; n: number; conceptos: Map<string, number> }>();
     for (const r of data) {
-      const cur = m.get(r.bien) ?? { bien: r.bien, categoria: r.categoria, cant: 0, costo: 0, n: 0 };
+      const cur = m.get(r.bien) ?? { bien: r.bien, concepto: "", cant: 0, costo: 0, n: 0, conceptos: new Map<string, number>() };
       cur.cant += r.cantidad; cur.costo += r.costo; cur.n += 1;
+      if (r.concepto) cur.conceptos.set(r.concepto, (cur.conceptos.get(r.concepto) ?? 0) + 1);
       m.set(r.bien, cur);
     }
-    return Array.from(m.values());
+    // concepto = el más frecuente para ese bien
+    return Array.from(m.values()).map(x => {
+      let top = ""; let best = 0;
+      x.conceptos.forEach((v, k) => { if (v > best) { best = v; top = k; } });
+      return { bien: x.bien, concepto: top, cant: x.cant, costo: x.costo, n: x.n };
+    });
   }, [data]);
 
   const filtered = useMemo(() => {
     const s = q.trim().toLowerCase();
-    return s ? agg.filter(r => r.bien.toLowerCase().includes(s) || r.categoria.toLowerCase().includes(s)) : agg;
+    return s ? agg.filter(r => r.bien.toLowerCase().includes(s) || r.concepto.toLowerCase().includes(s)) : agg;
   }, [agg, q]);
 
   const sorted = useMemo(() => {
@@ -55,7 +61,7 @@ export function TopTable({ data }: { data: Movement[] }) {
       kicker="Detalle operativo"
       exportData={() => ({
         filename: "ranking_bienes.csv",
-        csv: "bien,categoria,cantidad,costo,movimientos\n" + sorted.map(r => `"${r.bien.replace(/"/g, '""')}",${r.categoria},${r.cant},${r.costo},${r.n}`).join("\n"),
+        csv: "bien,concepto,cantidad,costo,movimientos\n" + sorted.map(r => `"${r.bien.replace(/"/g, '""')}","${r.concepto.replace(/"/g, '""')}",${r.cant},${r.costo},${r.n}`).join("\n"),
       })}
       actions={
         <div className="relative mr-1">
@@ -69,7 +75,7 @@ export function TopTable({ data }: { data: Movement[] }) {
         <table className="w-full text-xs">
           <thead>
             <tr className="text-left text-[10px] uppercase tracking-[0.12em] text-muted-foreground border-b border-border">
-              {([["bien", "Bien"], ["categoria", "Categoría"], ["cant", "Cantidad"], ["costo", "Costo total"], ["n", "Movs"]] as [SortKey, string][]).map(([k, l]) => (
+              {([["bien", "Bien / Unidad"], ["concepto", "Concepto"], ["cant", "Cantidad"], ["costo", "Costo total"], ["n", "Movs"]] as [SortKey, string][]).map(([k, l]) => (
                 <th key={k} className="py-2 px-2 font-medium">
                   <button onClick={() => setSort(k)} className="inline-flex items-center gap-1 hover:text-foreground transition-colors">
                     {l} <ArrowUpDown className={`w-3 h-3 ${sortKey === k ? "text-primary" : "opacity-40"}`} />
@@ -85,8 +91,8 @@ export function TopTable({ data }: { data: Movement[] }) {
                 <tr key={r.bien}
                   onClick={() => toggleFilter("biens", r.bien)}
                   className={`border-b border-border/40 cursor-pointer transition-colors hover:bg-primary/5 ${active ? "bg-primary/10" : ""}`}>
-                  <td className="py-2 px-2 max-w-[280px] truncate" title={r.bien}>{r.bien}</td>
-                  <td className="py-2 px-2 text-muted-foreground">{r.categoria}</td>
+                  <td className="py-2 px-2 w-[420px] max-w-[460px] truncate font-medium" title={r.bien}>{r.bien}</td>
+                  <td className="py-2 px-2 text-muted-foreground max-w-[280px] truncate" title={r.concepto}>{r.concepto}</td>
                   <td className="py-2 px-2 font-mono tabular-nums">{fmtCompact(r.cant)}</td>
                   <td className="py-2 px-2 font-mono tabular-nums text-primary">{fmtCurrency(r.costo)}</td>
                   <td className="py-2 px-2 font-mono tabular-nums text-muted-foreground">{r.n}</td>
