@@ -19,7 +19,8 @@ export function EquipoChart({ data }: { data: Movement[] }) {
       else cur.repuestos += r.costo;
       m.set(r.equipo, cur);
     }
-    return Array.from(m.values()).sort((a, b) => b.costo - a.costo);
+    return Array.from(m.values()).sort((a, b) => b.costo - a.costo)
+      .map(x => ({ ...x, short: x.equipo.length > 38 ? x.equipo.slice(0, 38) + "…" : x.equipo }));
   }, [data]);
 
   return (
