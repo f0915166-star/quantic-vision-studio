@@ -65,11 +65,11 @@ export function EquipoChart({ data }: { data: Movement[] }) {
           </Bar>
           <Bar dataKey="repuestos" stackId="a" radius={[0, 6, 6, 0]} fill="var(--color-chart-3)" cursor="pointer"
             onClick={(d) => toggleFilter("equipos", (d as { equipo: string }).equipo)}>
-            {agg.map(d => (
+            {agg.map((d, i) => (
               <Cell key={`r-${d.equipo}`}
                 fillOpacity={active.size === 0 || active.has(d.equipo) ? 1 : 0.25}
-                stroke={active.has(d.equipo) ? "var(--color-foreground)" : "transparent"}
-                strokeWidth={1.2}
+                stroke={i === 0 || active.has(d.equipo) ? "var(--color-chart-4)" : "transparent"}
+                strokeWidth={i === 0 ? 1.8 : 1.2}
               />
             ))}
           </Bar>
