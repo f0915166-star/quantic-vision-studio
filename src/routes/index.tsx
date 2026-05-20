@@ -5,14 +5,14 @@ import { DataProvider, useData, fmtCurrency, fmtCompact } from "@/lib/data-store
 import { ActiveFilters } from "@/components/dashboard/ActiveFilters";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { TrendChart } from "@/components/dashboard/TrendChart";
-import { CategoryBar } from "@/components/dashboard/CategoryBar";
 import { ParetoChart } from "@/components/dashboard/ParetoChart";
 import { HeatmapChart } from "@/components/dashboard/HeatmapChart";
 import { TreemapChart } from "@/components/dashboard/TreemapChart";
-import { ScatterAnalysis } from "@/components/dashboard/ScatterAnalysis";
+import { AreaResponsableChart } from "@/components/dashboard/AreaResponsableChart";
+import { ResponsableRanking } from "@/components/dashboard/ResponsableRanking";
 import { TopTable } from "@/components/dashboard/TopTable";
 import { FilterSidebar } from "@/components/dashboard/FilterSidebar";
-import { Activity, DollarSign, Package, Layers, Filter, Radio } from "lucide-react";
+import { Activity, DollarSign, Building2, Layers, Filter, Radio } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: () => (
@@ -28,9 +28,9 @@ function DashboardShell() {
 
   const stats = useMemo(() => {
     const costo = filtered.reduce((s, r) => s + r.costo, 0);
-    const cant = filtered.reduce((s, r) => s + r.cantidad, 0);
     const bienes = new Set(filtered.map(r => r.bien)).size;
-    // Comparativa vs periodo anterior: compare first half vs second half of filtered date span
+    const areas = new Set(filtered.map(r => r.area)).size;
+    const resps = new Set(filtered.map(r => r.responsable)).size;
     const dates = filtered.map(r => r.fecha).filter(Boolean).sort();
     let delta: number | undefined;
     if (dates.length > 10) {
@@ -39,7 +39,7 @@ function DashboardShell() {
       for (const r of filtered) (r.fecha < mid ? a += r.costo : b += r.costo);
       if (a > 0) delta = ((b - a) / a) * 100;
     }
-    return { costo, cant, bienes, n: filtered.length, delta };
+    return { costo, bienes, areas, resps, n: filtered.length, delta };
   }, [filtered]);
 
   if (loading) {
@@ -58,19 +58,17 @@ function DashboardShell() {
   if (error) return <div className="p-8 text-destructive">Error: {error}</div>;
 
   const pctOfTotal = all.length ? (filtered.length / all.length) * 100 : 0;
+  const activeCount = filters.categorias.size + filters.conceptos.size + filters.areas.size + filters.biens.size + filters.responsables.size;
 
   return (
     <div className="min-h-screen">
-      {/* Top bar */}
       <header className="sticky top-0 z-20 backdrop-blur-xl bg-background/70 border-b border-border">
         <div className="px-4 lg:px-8 h-16 flex items-center gap-4">
           <button onClick={() => setSidebarOpen(v => !v)}
             className="panel px-3 py-1.5 flex items-center gap-2 text-xs font-semibold hover:panel-glow transition-all">
             <Filter className="w-3.5 h-3.5 text-primary" /> Filtros
-            {(filters.categorias.size + filters.tipos.size + filters.biens.size + filters.responsables.size) > 0 && (
-              <span className="bg-primary text-primary-foreground rounded-full px-1.5 text-[10px] font-mono">
-                {filters.categorias.size + filters.tipos.size + filters.biens.size + filters.responsables.size}
-              </span>
+            {activeCount > 0 && (
+              <span className="bg-primary text-primary-foreground rounded-full px-1.5 text-[10px] font-mono">{activeCount}</span>
             )}
           </button>
 
@@ -80,7 +78,7 @@ function DashboardShell() {
             </div>
             <div>
               <h1 className="font-bold tracking-tight leading-none">NEXUS<span className="text-primary">·</span>OPS</h1>
-              <p className="text-[10px] text-muted-foreground font-mono leading-none mt-0.5">Operations Intelligence</p>
+              <p className="text-[10px] text-muted-foreground font-mono leading-none mt-0.5">Fleet Cost Intelligence</p>
             </div>
           </div>
 
@@ -108,11 +106,11 @@ function DashboardShell() {
             <div>
               <div className="text-[10px] uppercase tracking-[0.25em] text-primary font-semibold">Dashboard ejecutivo</div>
               <h2 className="text-2xl lg:text-3xl font-bold tracking-tight mt-1">
-                Control de <span className="text-gradient">Repuestos & Combustible</span>
+                Costos de <span className="text-gradient">Repuestos & Combustible</span> · Flota móvil
               </h2>
               <p className="text-sm text-muted-foreground mt-1">
                 {filtered.length === all.length
-                  ? "Vista completa · Haz click en cualquier elemento para hacer drill-down"
+                  ? "Vista completa · Cualquier elemento es interactivo y filtra todo el tablero"
                   : `Filtro activo · ${fmtCompact(filtered.length)} de ${fmtCompact(all.length)} movimientos`}
               </p>
             </div>
@@ -128,33 +126,33 @@ function DashboardShell() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <KpiCard label="Costo total" value={fmtCurrency(stats.costo)} sublabel="vs primer semestre" delta={stats.delta} icon={<DollarSign className="w-4 h-4" />} accent="primary" />
           <KpiCard label="Movimientos" value={fmtCompact(stats.n)} sublabel="registros operativos" icon={<Activity className="w-4 h-4" />} accent="accent" />
-          <KpiCard label="Unidades despachadas" value={fmtCompact(stats.cant)} sublabel="cantidad total" icon={<Package className="w-4 h-4" />} accent="info" />
-          <KpiCard label="Bienes únicos" value={fmtCompact(stats.bienes)} sublabel="SKUs activos" icon={<Layers className="w-4 h-4" />} accent="warning" />
+          <KpiCard label="Áreas activas" value={fmtCompact(stats.areas)} sublabel="áreas responsables" icon={<Building2 className="w-4 h-4" />} accent="info" />
+          <KpiCard label="Bienes únicos" value={fmtCompact(stats.bienes)} sublabel={`${stats.resps} responsables`} icon={<Layers className="w-4 h-4" />} accent="warning" />
         </div>
 
-        {/* ROW 2: trend */}
+        {/* ROW 2: tendencia mensual full */}
         <TrendChart data={filtered} />
 
-        {/* ROW 3: categoria + treemap */}
+        {/* ROW 3: Pareto + Treemap (categoría) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <CategoryBar data={filtered} />
+          <ParetoChart data={filtered} />
           <TreemapChart data={filtered} />
         </div>
 
-        {/* ROW 4: pareto + scatter */}
+        {/* ROW 4: Área + Responsables */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <ParetoChart data={filtered} />
-          <ScatterAnalysis data={filtered} />
+          <AreaResponsableChart data={filtered} />
+          <ResponsableRanking data={filtered} />
         </div>
 
-        {/* ROW 5: heatmap full width */}
+        {/* ROW 5: Heatmap concepto x mes */}
         <HeatmapChart data={filtered} />
 
-        {/* ROW 6: detail table */}
+        {/* ROW 6: tabla detalle */}
         <TopTable data={filtered} />
 
         <footer className="text-center text-[11px] text-muted-foreground font-mono py-6">
-          NEXUS·OPS v1.0 — Datos consolidados · Última sincronización {lastUpdated?.toLocaleString("es-PE")}
+          NEXUS·OPS v1.1 · Esquema BIEN · CATEGORIA · FECHA_MOVIMIENTO · COSTO_TOTAL · CONCEPTO · AREA_RESPONSABLE · RESPONSABLE · Última sincronización {lastUpdated?.toLocaleString("es-PE")}
         </footer>
       </main>
     </div>
