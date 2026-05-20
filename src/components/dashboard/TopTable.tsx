@@ -61,7 +61,7 @@ export function TopTable({ data }: { data: Movement[] }) {
       kicker="Detalle operativo"
       exportData={() => ({
         filename: "ranking_bienes.csv",
-        csv: "bien,categoria,cantidad,costo,movimientos\n" + sorted.map(r => `"${r.bien.replace(/"/g, '""')}",${r.categoria},${r.cant},${r.costo},${r.n}`).join("\n"),
+        csv: "bien,concepto,cantidad,costo,movimientos\n" + sorted.map(r => `"${r.bien.replace(/"/g, '""')}","${r.concepto.replace(/"/g, '""')}",${r.cant},${r.costo},${r.n}`).join("\n"),
       })}
       actions={
         <div className="relative mr-1">
