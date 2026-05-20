@@ -38,7 +38,7 @@ export function EquipoChart({ data }: { data: Movement[] }) {
         <BarChart data={agg} layout="vertical" margin={{ top: 4, right: 24, left: 0, bottom: 0 }} barCategoryGap={6}>
           <CartesianGrid stroke="var(--color-grid)" strokeDasharray="2 4" horizontal={false} />
           <XAxis type="number" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} tickFormatter={fmtCompact} />
-          <YAxis dataKey="equipo" type="category" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} width={180} />
+          <YAxis dataKey="short" type="category" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} width={280} interval={0} />
           <Tooltip
             cursor={{ fill: "oklch(0.78 0.18 165 / 0.08)" }}
             content={({ active: a, payload }) => {
