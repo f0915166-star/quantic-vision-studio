@@ -95,8 +95,8 @@ export function TopTable({ data }: { data: Movement[] }) {
                   <td className="py-2 px-2 w-[420px] max-w-[460px] truncate font-medium" title={r.bien}>{r.bien}</td>
                   <td className="py-2 px-2 text-muted-foreground max-w-[280px] truncate" title={r.concepto}>{r.concepto}</td>
                   <td className="py-2 px-2 font-mono tabular-nums">{fmtCompact(r.cant)}</td>
+                  <td className="py-2 px-2 font-mono tabular-nums text-muted-foreground">{fmtCurrency(r.unit)}</td>
                   <td className="py-2 px-2 font-mono tabular-nums text-primary">{fmtCurrency(r.costo)}</td>
-                  <td className="py-2 px-2 font-mono tabular-nums text-muted-foreground">{r.n}</td>
                 </tr>
               );
             })}
