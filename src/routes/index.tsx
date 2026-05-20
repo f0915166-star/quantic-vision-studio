@@ -13,7 +13,7 @@ import { ResponsableRanking } from "@/components/dashboard/ResponsableRanking";
 import { EquipoChart } from "@/components/dashboard/EquipoChart";
 import { TopTable } from "@/components/dashboard/TopTable";
 import { FilterSidebar } from "@/components/dashboard/FilterSidebar";
-import { Activity, DollarSign, Truck, Layers, Filter, Radio } from "lucide-react";
+import { Activity, DollarSign, Truck, Layers, Filter, Radio, TrendingUp, CalendarRange } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: () => (
