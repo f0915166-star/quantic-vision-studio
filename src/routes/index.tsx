@@ -13,7 +13,7 @@ import { ResponsableRanking } from "@/components/dashboard/ResponsableRanking";
 import { EquipoChart } from "@/components/dashboard/EquipoChart";
 import { TopTable } from "@/components/dashboard/TopTable";
 import { FilterSidebar } from "@/components/dashboard/FilterSidebar";
-import { Activity, DollarSign, Truck, Layers, Filter, Radio } from "lucide-react";
+import { Activity, DollarSign, Truck, Layers, Filter, Radio, TrendingUp, CalendarRange } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: () => (
@@ -40,8 +40,24 @@ function DashboardShell() {
       for (const r of filtered) (r.fecha < mid ? a += r.costo : b += r.costo);
       if (a > 0) delta = ((b - a) / a) * 100;
     }
-    return { costo, bienes, equipos, resps, n: filtered.length, delta };
+    // Mes pico + promedio mensual
+    const MES_ABBR = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+    const monthly = new Map<string, number>();
+    for (const r of filtered) {
+      const k = r.fecha?.slice(0, 7);
+      if (!k) continue;
+      monthly.set(k, (monthly.get(k) ?? 0) + r.costo);
+    }
+    const monthsCount = monthly.size;
+    const avgMonth = monthsCount ? costo / monthsCount : 0;
+    let peakKey = ""; let peakVal = 0;
+    monthly.forEach((v, k) => { if (v > peakVal) { peakVal = v; peakKey = k; } });
+    const peakLabel = peakKey
+      ? `${MES_ABBR[Number(peakKey.slice(5, 7)) - 1]} ${peakKey.slice(2, 4)}`
+      : "—";
+    return { costo, bienes, equipos, resps, n: filtered.length, delta, avgMonth, monthsCount, peakLabel, peakVal };
   }, [filtered]);
+
 
   if (loading) {
     return (
@@ -124,12 +140,15 @@ function DashboardShell() {
         <ActiveFilters />
 
         {/* KPI ROW */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
           <KpiCard label="Costo total" value={fmtCurrency(stats.costo)} sublabel="vs primer semestre" delta={stats.delta} icon={<DollarSign className="w-4 h-4" />} accent="primary" />
+          <KpiCard label="Promedio mensual" value={fmtCurrency(stats.avgMonth)} sublabel={`${stats.monthsCount} meses activos`} icon={<TrendingUp className="w-4 h-4" />} accent="accent" />
+          <KpiCard label="Mes pico" value={stats.peakLabel} sublabel={fmtCurrency(stats.peakVal)} icon={<CalendarRange className="w-4 h-4" />} accent="warning" />
           <KpiCard label="Movimientos" value={fmtCompact(stats.n)} sublabel="registros operativos" icon={<Activity className="w-4 h-4" />} accent="accent" />
           <KpiCard label="Equipos móviles" value={fmtCompact(stats.equipos)} sublabel={`${stats.resps} responsables`} icon={<Truck className="w-4 h-4" />} accent="info" />
           <KpiCard label="Bienes únicos" value={fmtCompact(stats.bienes)} sublabel="SKUs operativos" icon={<Layers className="w-4 h-4" />} accent="warning" />
         </div>
+
 
         {/* ROW 2: tendencia mensual full */}
         <TrendChart data={filtered} />

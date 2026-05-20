@@ -40,10 +40,15 @@ export function ParetoChart({ data }: { data: Movement[] }) {
           />
           <Bar yAxisId="l" dataKey="costo" radius={[6, 6, 0, 0]} cursor="pointer"
             onClick={(d) => toggleFilter("biens", (d as { bien: string }).bien)}>
-            {series.map(s => (
-              <Cell key={s.bien} fill="var(--color-chart-2)"
-                fillOpacity={filters.biens.size === 0 || filters.biens.has(s.bien) ? 1 : 0.25} />
-            ))}
+            {series.map((s, i) => {
+              const isMax = i === 0;
+              const selected = filters.biens.has(s.bien);
+              return (
+                <Cell key={s.bien}
+                  fill={isMax || selected ? "var(--color-chart-4)" : "var(--color-chart-2)"}
+                  fillOpacity={filters.biens.size === 0 || selected ? 1 : 0.25} />
+              );
+            })}
           </Bar>
           <Line yAxisId="r" type="monotone" dataKey="pct" stroke="var(--color-chart-3)" strokeWidth={2}
             dot={{ r: 3, fill: "var(--color-chart-3)" }} activeDot={{ r: 5 }} />
