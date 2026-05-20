@@ -15,18 +15,24 @@ export function TopTable({ data }: { data: Movement[] }) {
   const PAGE = 10;
 
   const agg = useMemo(() => {
-    const m = new Map<string, { bien: string; categoria: string; cant: number; costo: number; n: number }>();
+    const m = new Map<string, { bien: string; concepto: string; cant: number; costo: number; n: number; conceptos: Map<string, number> }>();
     for (const r of data) {
-      const cur = m.get(r.bien) ?? { bien: r.bien, categoria: r.categoria, cant: 0, costo: 0, n: 0 };
+      const cur = m.get(r.bien) ?? { bien: r.bien, concepto: "", cant: 0, costo: 0, n: 0, conceptos: new Map<string, number>() };
       cur.cant += r.cantidad; cur.costo += r.costo; cur.n += 1;
+      if (r.concepto) cur.conceptos.set(r.concepto, (cur.conceptos.get(r.concepto) ?? 0) + 1);
       m.set(r.bien, cur);
     }
-    return Array.from(m.values());
+    // concepto = el más frecuente para ese bien
+    return Array.from(m.values()).map(x => {
+      let top = ""; let best = 0;
+      x.conceptos.forEach((v, k) => { if (v > best) { best = v; top = k; } });
+      return { bien: x.bien, concepto: top, cant: x.cant, costo: x.costo, n: x.n };
+    });
   }, [data]);
 
   const filtered = useMemo(() => {
     const s = q.trim().toLowerCase();
-    return s ? agg.filter(r => r.bien.toLowerCase().includes(s) || r.categoria.toLowerCase().includes(s)) : agg;
+    return s ? agg.filter(r => r.bien.toLowerCase().includes(s) || r.concepto.toLowerCase().includes(s)) : agg;
   }, [agg, q]);
 
   const sorted = useMemo(() => {
