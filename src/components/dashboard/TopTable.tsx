@@ -4,7 +4,7 @@ import { fmtCurrency, fmtCompact, useData } from "@/lib/data-store";
 import type { Movement } from "@/lib/data-types";
 import { Search, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
 
-type SortKey = "bien" | "categoria" | "cant" | "costo" | "n";
+type SortKey = "bien" | "concepto" | "cant" | "costo" | "n";
 
 export function TopTable({ data }: { data: Movement[] }) {
   const { toggleFilter, filters } = useData();
