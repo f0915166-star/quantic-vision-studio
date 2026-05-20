@@ -98,6 +98,7 @@ export function TopTable({ data }: { data: Movement[] }) {
                   <td className="py-2 px-2 text-muted-foreground max-w-[280px] truncate" title={r.concepto}>{r.concepto}</td>
                   <td className="py-2 px-2 font-mono tabular-nums">{fmtCompact(r.cant)}</td>
                   <td className="py-2 px-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{r.unidad}</td>
+                  <td className="py-2 px-2 font-mono tabular-nums text-muted-foreground">{r.fecha || "—"}</td>
                   <td className="py-2 px-2 font-mono tabular-nums text-primary">{fmtCurrency(r.costo)}</td>
                 </tr>
               );
