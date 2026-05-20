@@ -10,9 +10,10 @@ import { HeatmapChart } from "@/components/dashboard/HeatmapChart";
 import { TreemapChart } from "@/components/dashboard/TreemapChart";
 import { AreaResponsableChart } from "@/components/dashboard/AreaResponsableChart";
 import { ResponsableRanking } from "@/components/dashboard/ResponsableRanking";
+import { EquipoChart } from "@/components/dashboard/EquipoChart";
 import { TopTable } from "@/components/dashboard/TopTable";
 import { FilterSidebar } from "@/components/dashboard/FilterSidebar";
-import { Activity, DollarSign, Building2, Layers, Filter, Radio } from "lucide-react";
+import { Activity, DollarSign, Truck, Layers, Filter, Radio } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: () => (
