@@ -6,7 +6,7 @@ import { ActiveFilters } from "@/components/dashboard/ActiveFilters";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { TrendChart } from "@/components/dashboard/TrendChart";
 import { ParetoChart } from "@/components/dashboard/ParetoChart";
-import { HeatmapChart } from "@/components/dashboard/HeatmapChart";
+
 import { TreemapChart } from "@/components/dashboard/TreemapChart";
 import { AreaResponsableChart } from "@/components/dashboard/AreaResponsableChart";
 import { ResponsableRanking } from "@/components/dashboard/ResponsableRanking";
@@ -149,8 +149,6 @@ function DashboardShell() {
           <ResponsableRanking data={filtered} />
         </div>
 
-        {/* ROW 6: Heatmap categoría x mes */}
-        <HeatmapChart data={filtered} />
 
         {/* ROW 6: tabla detalle */}
         <TopTable data={filtered} />
