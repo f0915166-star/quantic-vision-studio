@@ -5,13 +5,15 @@ import { fmtCurrency, fmtCompact, useData } from "@/lib/data-store";
 import { ChartPanel } from "./ChartPanel";
 import { PieChart as PieIcon } from "lucide-react";
 
+// Paleta distinta a la del gráfico de equipos (combustible/repuestos)
+// para evitar que se confunda Producción con Combustible.
 const PALETTE = [
-  "var(--color-chart-1)",
-  "var(--color-chart-3)",
-  "var(--color-chart-2)",
-  "var(--color-chart-4)",
   "var(--color-chart-5)",
   "var(--color-chart-6)",
+  "var(--color-chart-7)",
+  "var(--color-chart-8)",
+  "var(--color-chart-2)",
+  "var(--color-chart-4)",
 ];
 
 export function AreaDonut({ data }: { data: Movement[] }) {
