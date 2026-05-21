@@ -169,11 +169,3 @@ function DashboardShell() {
   );
 }
 
-function Stat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
-  return (
-    <div className="flex flex-col items-end">
-      <span className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground">{label}</span>
-      <span className={`tabular-nums ${accent ? "text-primary font-semibold" : ""}`}>{value}</span>
-    </div>
-  );
-}
