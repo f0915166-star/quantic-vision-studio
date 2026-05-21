@@ -6,7 +6,7 @@ import { Filter, Calendar, Tags, Users, Truck, Building2, ChevronDown, X } from 
 type SectionKey = "cat" | "equipo" | "area" | "resp";
 
 export function FilterSidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { all, filters, toggleFilter, setDateRange } = useData();
+  const { all, filters, toggleFilter, setFilter, setDateRange } = useData();
   const [section, setSection] = useState<SectionKey | null>("equipo");
 
   const counts = useMemo(() => {
@@ -70,19 +70,31 @@ export function FilterSidebar({ open, onClose }: { open: boolean; onClose: () =>
             <div className="flex-1 overflow-y-auto">
               <Section icon={<Truck className="w-3 h-3" />} label="Equipo móvil" open={section === "equipo"} onToggle={() => setSection(s => s === "equipo" ? null : "equipo")}
                 count={filters.equipos.size}>
-                <Chips items={sortFn(counts.equipos)} active={filters.equipos} onToggle={v => toggleFilter("equipos", v)} />
+                <Chips items={sortFn(counts.equipos)} active={filters.equipos}
+                  onToggle={v => toggleFilter("equipos", v)}
+                  onSelectAll={items => setFilter("equipos", items.map(([v]) => v))}
+                  onClear={() => setFilter("equipos", [])} />
               </Section>
               <Section icon={<Tags className="w-3 h-3" />} label="Categoría" open={section === "cat"} onToggle={() => setSection(s => s === "cat" ? null : "cat")}
                 count={filters.categorias.size}>
-                <Chips items={sortFn(counts.cats)} active={filters.categorias} onToggle={v => toggleFilter("categorias", v)} />
+                <Chips items={sortFn(counts.cats)} active={filters.categorias}
+                  onToggle={v => toggleFilter("categorias", v)}
+                  onSelectAll={items => setFilter("categorias", items.map(([v]) => v))}
+                  onClear={() => setFilter("categorias", [])} />
               </Section>
               <Section icon={<Building2 className="w-3 h-3" />} label="Área responsable" open={section === "area"} onToggle={() => setSection(s => s === "area" ? null : "area")}
                 count={filters.areas.size}>
-                <Chips items={sortFn(counts.areas)} active={filters.areas} onToggle={v => toggleFilter("areas", v)} />
+                <Chips items={sortFn(counts.areas)} active={filters.areas}
+                  onToggle={v => toggleFilter("areas", v)}
+                  onSelectAll={items => setFilter("areas", items.map(([v]) => v))}
+                  onClear={() => setFilter("areas", [])} />
               </Section>
               <Section icon={<Users className="w-3 h-3" />} label="Responsable" open={section === "resp"} onToggle={() => setSection(s => s === "resp" ? null : "resp")}
                 count={filters.responsables.size}>
-                <Chips items={sortFn(counts.resps).slice(0, 60)} active={filters.responsables} onToggle={v => toggleFilter("responsables", v)} />
+                <Chips items={sortFn(counts.resps).slice(0, 60)} active={filters.responsables}
+                  onToggle={v => toggleFilter("responsables", v)}
+                  onSelectAll={items => setFilter("responsables", items.map(([v]) => v))}
+                  onClear={() => setFilter("responsables", [])} />
               </Section>
             </div>
           </motion.aside>
@@ -114,9 +126,29 @@ function Section({ icon, label, open, onToggle, count, children }: { icon: React
   );
 }
 
-function Chips({ items, active, onToggle }: { items: [string, number][]; active: Set<string>; onToggle: (v: string) => void }) {
+function Chips({ items, active, onToggle, onSelectAll, onClear }: { items: [string, number][]; active: Set<string>; onToggle: (v: string) => void; onSelectAll: (items: [string, number][]) => void; onClear: () => void }) {
   return (
     <div className="flex flex-col gap-1">
+      <div className="flex items-center gap-1.5 mb-1.5 sticky top-0 bg-card/95 backdrop-blur py-1 z-10">
+        <button
+          type="button"
+          onClick={() => onSelectAll(items)}
+          className="text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded-md bg-primary/15 text-primary hover:bg-primary/25 transition-colors"
+        >
+          ✓ Todo
+        </button>
+        <button
+          type="button"
+          onClick={onClear}
+          disabled={active.size === 0}
+          className="text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded-md bg-secondary/60 text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          ✕ Limpiar
+        </button>
+        <span className="ml-auto text-[10px] font-mono text-muted-foreground">
+          {active.size}/{items.length}
+        </span>
+      </div>
       {items.map(([v, n]) => {
         const checked = active.has(v);
         return (
