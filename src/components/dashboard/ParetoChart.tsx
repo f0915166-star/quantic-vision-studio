@@ -19,10 +19,14 @@ export function ParetoChart({ data }: { data: Movement[] }) {
   const series = useMemo(() => {
     const m = new Map<string, number>();
     for (const r of data) m.set(r.bien, (m.get(r.bien) ?? 0) + r.costo);
-    const arr = Array.from(m.entries())
+    const sorted = Array.from(m.entries())
       .map(([bien, costo]) => ({ bien, costo }))
-      .sort((a, b) => b.costo - a.costo)
-      .slice(0, 15);
+      .sort((a, b) => b.costo - a.costo);
+    const arr = sorted.slice(0, 10);
+    const rest = sorted.slice(10);
+    if (rest.length) {
+      arr.push({ bien: "Otros", costo: rest.reduce((s, x) => s + x.costo, 0) });
+    }
     const total = arr.reduce((s, x) => s + x.costo, 0);
     let acc = 0;
     return arr.map((x, i) => {
