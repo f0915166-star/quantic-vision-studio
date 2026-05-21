@@ -13,7 +13,7 @@ export function ResponsableRanking({ data }: { data: Movement[] }) {
       cur.costo += r.costo; cur.n += 1; cur.bienes.add(r.bien);
       m.set(r.responsable, cur);
     }
-    const arr = Array.from(m.values()).sort((a, b) => b.costo - a.costo).slice(0, 12);
+    const arr = Array.from(m.values()).sort((a, b) => b.costo - a.costo);
     const max = arr[0]?.costo ?? 1;
     return arr.map(x => ({ ...x, bienesN: x.bienes.size, pct: (x.costo / max) * 100 }));
   }, [data]);
@@ -28,7 +28,7 @@ export function ResponsableRanking({ data }: { data: Movement[] }) {
         csv: "responsable,costo,movimientos,bienes_unicos\n" + top.map(r => `"${r.responsable}",${r.costo},${r.n},${r.bienesN}`).join("\n"),
       })}
     >
-      <div className="space-y-1.5">
+      <div className="space-y-1.5 max-h-[520px] overflow-y-auto pr-1 -mr-1">
         {top.length === 0 && <div className="text-xs text-muted-foreground py-6 text-center">Sin datos para el filtro actual.</div>}
         {top.map((r, i) => {
           const isActive = filters.responsables.has(r.responsable);
@@ -48,7 +48,6 @@ export function ResponsableRanking({ data }: { data: Movement[] }) {
                 }}
               />
               <div className="relative flex items-center gap-3">
-                <span className="text-[10px] font-mono text-muted-foreground w-5 text-right tabular-nums">{String(i + 1).padStart(2, "0")}</span>
                 <div className="flex-1 min-w-0">
                   <div className="text-xs font-medium truncate">{r.responsable || "(sin responsable)"}</div>
                   <div className="text-[10px] text-muted-foreground font-mono">{fmtCompact(r.n)} movs · {r.bienesN} bienes</div>

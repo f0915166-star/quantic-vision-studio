@@ -160,15 +160,15 @@ function DashboardShell() {
           <div className="lg:col-span-3"><AreaDonut data={filtered} /></div>
         </div>
 
-        {/* ROW 4: Pareto + Treemap (bienes y categorías) */}
+        {/* ROW 4: Pareto + Responsables */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <ParetoChart data={filtered} />
-          <TreemapChart data={filtered} />
+          <ResponsableRanking data={filtered} />
         </div>
 
-        {/* ROW 5: Responsables */}
+        {/* ROW 5: Treemap full width */}
         <div className="grid grid-cols-1 gap-4">
-          <ResponsableRanking data={filtered} />
+          <TreemapChart data={filtered} />
         </div>
 
 
