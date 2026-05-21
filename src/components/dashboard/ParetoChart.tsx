@@ -30,8 +30,8 @@ export function ParetoChart({ data }: { data: Movement[] }) {
       exportData={() => ({
         filename: "top-bienes.csv",
         csv:
-          "bien,costo,movimientos,responsables\n" +
-          top.map(r => `"${r.bien.replace(/"/g, '""')}",${r.costo},${r.n},${r.respN}`).join("\n"),
+          "bien,costo,movimientos,cantidad,unidad\n" +
+          top.map(r => `"${r.bien.replace(/"/g, '""')}",${r.costo},${r.n},${r.cantidad},"${(r.unidad ?? "").replace(/"/g, '""')}"`).join("\n"),
       })}
     >
       <div className="space-y-1.5 h-[420px] overflow-y-auto pr-1 -mr-1">
