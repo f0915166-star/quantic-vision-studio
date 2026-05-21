@@ -12,6 +12,7 @@ import { TreemapChart } from "@/components/dashboard/TreemapChart";
 import { ResponsableRanking } from "@/components/dashboard/ResponsableRanking";
 import { EquipoChart } from "@/components/dashboard/EquipoChart";
 import { AreaDonut } from "@/components/dashboard/AreaDonut";
+import { CategoriaDonut } from "@/components/dashboard/CategoriaDonut";
 import { TopTable } from "@/components/dashboard/TopTable";
 import { FilterSidebar } from "@/components/dashboard/FilterSidebar";
 import { Activity, DollarSign, Truck, Layers, Filter, Radio, TrendingUp, CalendarRange } from "lucide-react";
@@ -157,7 +158,10 @@ function DashboardShell() {
         {/* ROW 3: FLOTA — equipo móvil (70%) + Áreas donut (30%) */}
         <div className="grid grid-cols-1 lg:grid-cols-10 gap-4">
           <div className="lg:col-span-7"><EquipoChart data={filtered} /></div>
-          <div className="lg:col-span-3"><AreaDonut data={filtered} /></div>
+          <div className="lg:col-span-3 flex flex-col gap-4">
+            <AreaDonut data={filtered} />
+            <CategoriaDonut data={filtered} />
+          </div>
         </div>
 
         {/* ROW 4: Pareto + Responsables */}
