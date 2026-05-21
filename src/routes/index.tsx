@@ -8,7 +8,7 @@ import { TrendChart } from "@/components/dashboard/TrendChart";
 import { ParetoChart } from "@/components/dashboard/ParetoChart";
 
 import { TreemapChart } from "@/components/dashboard/TreemapChart";
-import { AreaResponsableChart } from "@/components/dashboard/AreaResponsableChart";
+
 import { ResponsableRanking } from "@/components/dashboard/ResponsableRanking";
 import { EquipoChart } from "@/components/dashboard/EquipoChart";
 import { AreaDonut } from "@/components/dashboard/AreaDonut";
@@ -166,9 +166,8 @@ function DashboardShell() {
           <TreemapChart data={filtered} />
         </div>
 
-        {/* ROW 5: Área + Responsables */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <AreaResponsableChart data={filtered} />
+        {/* ROW 5: Responsables */}
+        <div className="grid grid-cols-1 gap-4">
           <ResponsableRanking data={filtered} />
         </div>
 
