@@ -6,7 +6,7 @@ import { Filter, Calendar, Tags, Users, Truck, Building2, ChevronDown, X } from 
 type SectionKey = "cat" | "equipo" | "area" | "resp";
 
 export function FilterSidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { all, filters, toggleFilter, setDateRange } = useData();
+  const { all, filters, toggleFilter, setFilter, setDateRange } = useData();
   const [section, setSection] = useState<SectionKey | null>("equipo");
 
   const counts = useMemo(() => {
