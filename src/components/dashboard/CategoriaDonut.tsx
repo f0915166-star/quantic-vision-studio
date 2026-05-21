@@ -39,7 +39,7 @@ export function CategoriaDonut({ data }: { data: Movement[] }) {
           agg.map(r => `"${r.label}",${r.costo.toFixed(2)},${r.n},${r.pct.toFixed(2)}`).join("\n"),
       })}
     >
-      <div className="relative h-[340px]">
+      <div className="relative h-[260px]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -48,8 +48,8 @@ export function CategoriaDonut({ data }: { data: Movement[] }) {
               nameKey="label"
               cx="50%"
               cy="50%"
-              innerRadius={88}
-              outerRadius={135}
+              innerRadius={66}
+              outerRadius={104}
               paddingAngle={2}
               stroke="var(--color-background)"
               strokeWidth={2}

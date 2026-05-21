@@ -51,7 +51,7 @@ export function AreaDonut({ data }: { data: Movement[] }) {
           agg.map(r => `"${r.area}",${r.costo.toFixed(2)},${r.n},${r.pct.toFixed(2)}`).join("\n"),
       })}
     >
-      <div className="relative h-[340px]">
+      <div className="relative h-[260px]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -60,8 +60,8 @@ export function AreaDonut({ data }: { data: Movement[] }) {
               nameKey="area"
               cx="50%"
               cy="50%"
-              innerRadius={88}
-              outerRadius={135}
+              innerRadius={66}
+              outerRadius={104}
               paddingAngle={2}
               stroke="var(--color-background)"
               strokeWidth={2}
