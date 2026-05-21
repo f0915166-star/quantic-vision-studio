@@ -121,7 +121,7 @@ export function CategoriaDonut({ data, allData }: { data: Movement[]; allData: M
         {agg.map((d) => (
           <li
             key={d.key}
-            onClick={() => toggleFilter("categorias", d.key)}
+            onClick={() => handleClick(d.key)}
             className="flex items-center gap-2 text-xs cursor-pointer group"
           >
             <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: d.fill }} />
