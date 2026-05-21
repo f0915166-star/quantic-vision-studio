@@ -40,14 +40,14 @@ export function TreemapChart({ data }: { data: Movement[] }) {
             if (!name || width <= 0 || height <= 0) return <g />;
             // Tamaños tipográficos adaptativos según área del rectángulo
             const minDim = Math.min(width, height);
-            const nameFont = Math.max(10, Math.min(18, Math.round(minDim / 9)));
-            const costFont = Math.max(9, Math.min(13, Math.round(minDim / 13)));
-            const showName = width > 48 && height > 22;
-            const showCost = width > 70 && height > 40;
+            const nameFont = Math.max(10, Math.min(16, Math.round(minDim / 10)));
+            const costFont = Math.max(9, Math.min(12, Math.round(minDim / 14)));
+            const showName = width > 44 && height > 22;
+            const showCost = width > 70 && height > 44;
             const padX = 8;
             const padY = nameFont + 6;
             // Truncado simple para nombres largos en cajas chicas
-            const maxChars = Math.max(4, Math.floor((width - padX * 2) / (nameFont * 0.55)));
+            const maxChars = Math.max(4, Math.floor((width - padX * 2) / (nameFont * 0.6)));
             const display = name.length > maxChars ? name.slice(0, maxChars - 1) + "…" : name;
             return (
               <g style={{ cursor: "pointer" }} onClick={() => toggleFilter("categorias", name)}>
@@ -57,7 +57,7 @@ export function TreemapChart({ data }: { data: Movement[] }) {
                   width={width}
                   height={height}
                   fill={fill}
-                  fillOpacity={0.88}
+                  fillOpacity={0.92}
                   stroke="var(--color-background)"
                   strokeWidth={2}
                   rx={6}
@@ -68,7 +68,11 @@ export function TreemapChart({ data }: { data: Movement[] }) {
                     y={y + padY}
                     fontSize={nameFont}
                     fontWeight={800}
-                    fill="oklch(0.14 0.02 250)"
+                    fill="#ffffff"
+                    stroke="rgba(0,0,0,0.55)"
+                    strokeWidth={3}
+                    strokeLinejoin="round"
+                    paintOrder="stroke"
                     style={{ letterSpacing: "0.02em", textTransform: "uppercase" }}
                   >
                     {display}
@@ -80,14 +84,20 @@ export function TreemapChart({ data }: { data: Movement[] }) {
                     y={y + padY + costFont + 4}
                     fontSize={costFont}
                     fontFamily="monospace"
-                    fontWeight={600}
-                    fill="oklch(0.18 0.02 250 / 0.78)"
+                    fontWeight={700}
+                    fill="#ffffff"
+                    stroke="rgba(0,0,0,0.55)"
+                    strokeWidth={2.5}
+                    strokeLinejoin="round"
+                    paintOrder="stroke"
+                    fillOpacity={0.95}
                   >
                     {fmtCurrency(size ?? 0)}
                   </text>
                 )}
               </g>
             );
+
           }) as never}
         >
           <Tooltip
