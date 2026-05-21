@@ -35,8 +35,9 @@ export function TreemapChart({ data }: { data: Movement[] }) {
           animationDuration={400}
           content={((props: unknown) => {
             const { x, y, width, height, name, fill, size } = props as {
-              x: number; y: number; width: number; height: number; name: string; fill: string; size: number;
+              x: number; y: number; width: number; height: number; name?: string; fill?: string; size?: number;
             };
+            if (!name || width <= 0 || height <= 0) return <g />;
             // Tamaños tipográficos adaptativos según área del rectángulo
             const minDim = Math.min(width, height);
             const nameFont = Math.max(10, Math.min(18, Math.round(minDim / 9)));
