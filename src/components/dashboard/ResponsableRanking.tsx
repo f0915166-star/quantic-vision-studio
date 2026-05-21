@@ -28,7 +28,7 @@ export function ResponsableRanking({ data }: { data: Movement[] }) {
         csv: "responsable,costo,movimientos,bienes_unicos\n" + top.map(r => `"${r.responsable}",${r.costo},${r.n},${r.bienesN}`).join("\n"),
       })}
     >
-      <div className="space-y-1.5 max-h-[520px] overflow-y-auto pr-1 -mr-1">
+      <div className="space-y-1.5 h-[420px] overflow-y-auto pr-1 -mr-1">
         {top.length === 0 && <div className="text-xs text-muted-foreground py-6 text-center">Sin datos para el filtro actual.</div>}
         {top.map((r, i) => {
           const isActive = filters.responsables.has(r.responsable);

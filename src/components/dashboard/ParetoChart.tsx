@@ -17,7 +17,7 @@ export function ParetoChart({ data }: { data: Movement[] }) {
 
   return (
     <ChartPanel title="Análisis Pareto — Top bienes" subtitle="80/20: los pocos vitales del costo total" kicker="Pareto 80/20">
-      <ResponsiveContainer width="100%" height={320}>
+      <ResponsiveContainer width="100%" height={420}>
         <ComposedChart data={series} margin={{ top: 10, right: 10, left: 0, bottom: 60 }}>
           <CartesianGrid stroke="var(--color-grid)" strokeDasharray="2 4" vertical={false} />
           <XAxis dataKey="short" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false}
