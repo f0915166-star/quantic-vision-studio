@@ -87,7 +87,7 @@ function DashboardShell() {
   }
   if (error) return <div className="p-8 text-destructive">Error: {error}</div>;
 
-  const pctOfTotal = all.length ? (filtered.length / all.length) * 100 : 0;
+  
   const activeCount = filters.categorias.size + filters.equipos.size + filters.areas.size + filters.biens.size + filters.responsables.size;
 
   return (
