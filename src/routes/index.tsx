@@ -42,6 +42,17 @@ function DashboardShell() {
       for (const r of filtered) (r.fecha < mid ? a += r.costo : b += r.costo);
       if (a > 0) delta = ((b - a) / a) * 100;
     }
+    // Equipo y bien con mayor costo
+    const equipoMap = new Map<string, number>();
+    const bienMap = new Map<string, number>();
+    for (const r of filtered) {
+      equipoMap.set(r.equipo, (equipoMap.get(r.equipo) ?? 0) + r.costo);
+      bienMap.set(r.bien, (bienMap.get(r.bien) ?? 0) + r.costo);
+    }
+    let topEquipo = ""; let topEquipoVal = 0;
+    equipoMap.forEach((v, k) => { if (v > topEquipoVal) { topEquipoVal = v; topEquipo = k; } });
+    let topBien = ""; let topBienVal = 0;
+    bienMap.forEach((v, k) => { if (v > topBienVal) { topBienVal = v; topBien = k; } });
     // Mes pico + promedio mensual
     const MES_ABBR = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
     const monthly = new Map<string, number>();
@@ -57,7 +68,7 @@ function DashboardShell() {
     const peakLabel = peakKey
       ? `${MES_ABBR[Number(peakKey.slice(5, 7)) - 1]} ${peakKey.slice(2, 4)}`
       : "—";
-    return { costo, bienes, equipos, resps, n: filtered.length, delta, avgMonth, monthsCount, peakLabel, peakVal };
+    return { costo, bienes, equipos, resps, n: filtered.length, delta, avgMonth, monthsCount, peakLabel, peakVal, topEquipo, topEquipoVal, topBien, topBienVal };
   }, [filtered]);
 
 
@@ -147,8 +158,8 @@ function DashboardShell() {
           <KpiCard label="Promedio mensual" value={fmtCurrency(stats.avgMonth)} sublabel={`${stats.monthsCount} meses activos`} icon={<TrendingUp className="w-4 h-4" />} accent="accent" />
           <KpiCard label="Mes pico" value={stats.peakLabel} sublabel={fmtCurrency(stats.peakVal)} icon={<CalendarRange className="w-4 h-4" />} accent="warning" />
           <KpiCard label="Movimientos" value={fmtCompact(stats.n)} sublabel="registros operativos" icon={<Activity className="w-4 h-4" />} accent="accent" />
-          <KpiCard label="Equipos móviles" value={fmtCompact(stats.equipos)} sublabel={`${stats.resps} responsables`} icon={<Truck className="w-4 h-4" />} accent="info" />
-          <KpiCard label="Bienes únicos" value={fmtCompact(stats.bienes)} sublabel="SKUs operativos" icon={<Layers className="w-4 h-4" />} accent="warning" />
+          <KpiCard label="Equipo más costoso" value={stats.topEquipo ? (stats.topEquipo.length > 22 ? stats.topEquipo.slice(0, 22) + "…" : stats.topEquipo) : "—"} sublabel={fmtCurrency(stats.topEquipoVal)} icon={<Truck className="w-4 h-4" />} accent="info" />
+          <KpiCard label="Bien más costoso" value={stats.topBien ? (stats.topBien.length > 22 ? stats.topBien.slice(0, 22) + "…" : stats.topBien) : "—"} sublabel={fmtCurrency(stats.topBienVal)} icon={<Layers className="w-4 h-4" />} accent="warning" />
         </div>
 
 
