@@ -6,9 +6,18 @@ import { ChartPanel } from "./ChartPanel";
 import { Fuel } from "lucide-react";
 
 // Mismos colores que EquipoChart: combustible = chart-1, repuestos = chart-3
-export function CategoriaDonut({ data }: { data: Movement[] }) {
-  const { toggleFilter, filters } = useData();
+// Nota: en la BD "Repuestos" agrupa todas las categorías ≠ COMBUSTIBLE
+// (FILTRO, ACEITE, EPP, etc.), por eso el click setea el filtro como conjunto.
+export function CategoriaDonut({ data, allData }: { data: Movement[]; allData: Movement[] }) {
+  const { setFilter, filters } = useData();
   const active = filters.categorias;
+
+  // Lista completa de categorías "repuesto" (todas menos COMBUSTIBLE) del universo
+  const repuestoCats = useMemo(() => {
+    const s = new Set<string>();
+    for (const r of allData) if (r.categoria !== "COMBUSTIBLE") s.add(r.categoria);
+    return Array.from(s);
+  }, [allData]);
 
   const agg = useMemo(() => {
     let combustible = 0, repuestos = 0;
@@ -24,6 +33,28 @@ export function CategoriaDonut({ data }: { data: Movement[] }) {
     ];
     return arr.map(x => ({ ...x, pct: total ? (x.costo / total) * 100 : 0 }));
   }, [data]);
+
+  // Estado visual: ¿este slice está activo según los filtros actuales?
+  const isActive = (key: string) => {
+    if (active.size === 0) return true;
+    if (key === "COMBUSTIBLE") return active.has("COMBUSTIBLE");
+    // REPUESTOS activo si hay al menos una categoría no-combustible seleccionada
+    for (const c of active) if (c !== "COMBUSTIBLE") return true;
+    return false;
+  };
+
+  const handleClick = (key: string) => {
+    if (key === "COMBUSTIBLE") {
+      // Toggle solo combustible
+      if (active.size === 1 && active.has("COMBUSTIBLE")) setFilter("categorias", []);
+      else setFilter("categorias", ["COMBUSTIBLE"]);
+    } else {
+      // Toggle todas las categorías de repuesto
+      const hasAnyRep = Array.from(active).some(c => c !== "COMBUSTIBLE");
+      if (hasAnyRep && !active.has("COMBUSTIBLE")) setFilter("categorias", []);
+      else setFilter("categorias", repuestoCats);
+    }
+  };
 
   const total = agg.reduce((s, x) => s + x.costo, 0);
   const totalN = agg.reduce((s, x) => s + x.n, 0);
