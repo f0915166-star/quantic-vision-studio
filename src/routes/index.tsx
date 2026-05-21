@@ -158,8 +158,8 @@ function DashboardShell() {
           <KpiCard label="Promedio mensual" value={fmtCurrency(stats.avgMonth)} sublabel={`${stats.monthsCount} meses activos`} icon={<TrendingUp className="w-4 h-4" />} accent="accent" />
           <KpiCard label="Mes pico" value={stats.peakLabel} sublabel={fmtCurrency(stats.peakVal)} icon={<CalendarRange className="w-4 h-4" />} accent="warning" />
           <KpiCard label="Movimientos" value={fmtCompact(stats.n)} sublabel="registros operativos" icon={<Activity className="w-4 h-4" />} accent="accent" />
-          <KpiCard label="Equipos móviles" value={fmtCompact(stats.equipos)} sublabel={`${stats.resps} responsables`} icon={<Truck className="w-4 h-4" />} accent="info" />
-          <KpiCard label="Bienes únicos" value={fmtCompact(stats.bienes)} sublabel="SKUs operativos" icon={<Layers className="w-4 h-4" />} accent="warning" />
+          <KpiCard label="Equipo más costoso" value={stats.topEquipo ? (stats.topEquipo.length > 22 ? stats.topEquipo.slice(0, 22) + "…" : stats.topEquipo) : "—"} sublabel={fmtCurrency(stats.topEquipoVal)} icon={<Truck className="w-4 h-4" />} accent="info" />
+          <KpiCard label="Bien más costoso" value={stats.topBien ? (stats.topBien.length > 22 ? stats.topBien.slice(0, 22) + "…" : stats.topBien) : "—"} sublabel={fmtCurrency(stats.topBienVal)} icon={<Layers className="w-4 h-4" />} accent="warning" />
         </div>
 
 
