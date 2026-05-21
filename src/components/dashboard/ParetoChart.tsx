@@ -8,17 +8,18 @@ export function ParetoChart({ data }: { data: Movement[] }) {
   const { filters, toggleFilter } = useData();
 
   const top = useMemo(() => {
-    const m = new Map<string, { bien: string; costo: number; n: number; responsables: Set<string> }>();
+    const m = new Map<string, { bien: string; costo: number; n: number; cantidad: number; unidad: string }>();
     for (const r of data) {
-      const cur = m.get(r.bien) ?? { bien: r.bien, costo: 0, n: 0, responsables: new Set<string>() };
+      const cur = m.get(r.bien) ?? { bien: r.bien, costo: 0, n: 0, cantidad: 0, unidad: r.unidad ?? "" };
       cur.costo += r.costo;
       cur.n += 1;
-      if (r.responsable) cur.responsables.add(r.responsable);
+      cur.cantidad += r.cantidad ?? 0;
+      if (!cur.unidad && r.unidad) cur.unidad = r.unidad;
       m.set(r.bien, cur);
     }
     const arr = Array.from(m.values()).sort((a, b) => b.costo - a.costo);
     const max = arr[0]?.costo ?? 1;
-    return arr.map(x => ({ ...x, respN: x.responsables.size, pct: (x.costo / max) * 100 }));
+    return arr.map(x => ({ ...x, pct: (x.costo / max) * 100 }));
   }, [data]);
 
   return (
