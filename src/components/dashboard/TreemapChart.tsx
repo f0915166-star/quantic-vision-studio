@@ -26,7 +26,7 @@ export function TreemapChart({ data }: { data: Movement[] }) {
   }, [data]);
 
   return (
-    <ChartPanel title="Treemap proporcional" subtitle="Tamaño = costo total (escala comprimida para legibilidad). Click para filtrar" kicker="Composición">
+    <ChartPanel title="Treemap proporcional" kicker="Composición">
       <ResponsiveContainer width="100%" height={340}>
         <Treemap
           data={tree}
