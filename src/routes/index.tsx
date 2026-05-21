@@ -15,7 +15,7 @@ import { AreaDonut } from "@/components/dashboard/AreaDonut";
 import { CategoriaDonut } from "@/components/dashboard/CategoriaDonut";
 import { TopTable } from "@/components/dashboard/TopTable";
 import { FilterSidebar } from "@/components/dashboard/FilterSidebar";
-import { Activity, DollarSign, Truck, Layers, Filter, Radio, TrendingUp, CalendarRange } from "lucide-react";
+import { Activity, DollarSign, Truck, Layers, Filter, TrendingUp, CalendarRange } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: () => (
