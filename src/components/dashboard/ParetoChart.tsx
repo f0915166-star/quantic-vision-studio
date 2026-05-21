@@ -59,7 +59,7 @@ export function ParetoChart({ data }: { data: Movement[] }) {
                 <div className="flex-1 min-w-0">
                   <div className="text-xs font-medium truncate">{r.bien || "(sin bien)"}</div>
                   <div className="text-[10px] text-muted-foreground font-mono">
-                    {fmtCompact(r.n)} movs · {r.respN} responsables
+                    {fmtCompact(r.n)} movs · {fmtCompact(r.cantidad)}{r.unidad ? ` ${r.unidad}` : ""}
                   </div>
                 </div>
                 <div className="text-xs font-mono tabular-nums text-primary font-semibold">{fmtCurrency(r.costo)}</div>
