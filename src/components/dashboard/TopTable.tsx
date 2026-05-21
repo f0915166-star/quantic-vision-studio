@@ -52,7 +52,7 @@ export function TopTable({ data }: { data: Movement[] }) {
   return (
     <ChartPanel
       title="Historial de movimientos"
-      subtitle={`${fmtCompact(sorted.length)} movimientos · click en una fila para filtrar por bien`}
+      
       kicker="Detalle operativo"
       exportData={() => ({
         filename: "historial_movimientos.csv",
