@@ -83,7 +83,7 @@ export function TreemapChart({ data }: { data: Movement[] }) {
                     fontWeight={600}
                     fill="oklch(0.18 0.02 250 / 0.78)"
                   >
-                    {fmtCurrency(size)}
+                    {fmtCurrency(size ?? 0)}
                   </text>
                 )}
               </g>
