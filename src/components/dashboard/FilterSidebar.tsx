@@ -70,19 +70,31 @@ export function FilterSidebar({ open, onClose }: { open: boolean; onClose: () =>
             <div className="flex-1 overflow-y-auto">
               <Section icon={<Truck className="w-3 h-3" />} label="Equipo móvil" open={section === "equipo"} onToggle={() => setSection(s => s === "equipo" ? null : "equipo")}
                 count={filters.equipos.size}>
-                <Chips items={sortFn(counts.equipos)} active={filters.equipos} onToggle={v => toggleFilter("equipos", v)} />
+                <Chips items={sortFn(counts.equipos)} active={filters.equipos}
+                  onToggle={v => toggleFilter("equipos", v)}
+                  onSelectAll={items => setFilter("equipos", items.map(([v]) => v))}
+                  onClear={() => setFilter("equipos", [])} />
               </Section>
               <Section icon={<Tags className="w-3 h-3" />} label="Categoría" open={section === "cat"} onToggle={() => setSection(s => s === "cat" ? null : "cat")}
                 count={filters.categorias.size}>
-                <Chips items={sortFn(counts.cats)} active={filters.categorias} onToggle={v => toggleFilter("categorias", v)} />
+                <Chips items={sortFn(counts.cats)} active={filters.categorias}
+                  onToggle={v => toggleFilter("categorias", v)}
+                  onSelectAll={items => setFilter("categorias", items.map(([v]) => v))}
+                  onClear={() => setFilter("categorias", [])} />
               </Section>
               <Section icon={<Building2 className="w-3 h-3" />} label="Área responsable" open={section === "area"} onToggle={() => setSection(s => s === "area" ? null : "area")}
                 count={filters.areas.size}>
-                <Chips items={sortFn(counts.areas)} active={filters.areas} onToggle={v => toggleFilter("areas", v)} />
+                <Chips items={sortFn(counts.areas)} active={filters.areas}
+                  onToggle={v => toggleFilter("areas", v)}
+                  onSelectAll={items => setFilter("areas", items.map(([v]) => v))}
+                  onClear={() => setFilter("areas", [])} />
               </Section>
               <Section icon={<Users className="w-3 h-3" />} label="Responsable" open={section === "resp"} onToggle={() => setSection(s => s === "resp" ? null : "resp")}
                 count={filters.responsables.size}>
-                <Chips items={sortFn(counts.resps).slice(0, 60)} active={filters.responsables} onToggle={v => toggleFilter("responsables", v)} />
+                <Chips items={sortFn(counts.resps).slice(0, 60)} active={filters.responsables}
+                  onToggle={v => toggleFilter("responsables", v)}
+                  onSelectAll={items => setFilter("responsables", items.map(([v]) => v))}
+                  onClear={() => setFilter("responsables", [])} />
               </Section>
             </div>
           </motion.aside>
