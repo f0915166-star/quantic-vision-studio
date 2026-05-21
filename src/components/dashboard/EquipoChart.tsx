@@ -20,8 +20,35 @@ export function EquipoChart({ data }: { data: Movement[] }) {
       m.set(r.equipo, cur);
     }
     return Array.from(m.values()).sort((a, b) => b.costo - a.costo)
-      .map(x => ({ ...x, short: x.equipo.length > 38 ? x.equipo.slice(0, 38) + "…" : x.equipo }));
+      .map(x => ({ ...x, short: x.equipo.length > 44 ? x.equipo.slice(0, 44) + "…" : x.equipo }));
   }, [data]);
+
+  const CustomTick = ({ x, y, payload, index }: { x?: number; y?: number; payload?: { value: string }; index?: number }) => {
+    const label = payload?.value ?? "";
+    const isTop = (index ?? 99) < 3;
+    const equipo = agg[index ?? 0]?.equipo ?? label;
+    const isActive = active.size === 0 || active.has(equipo);
+    return (
+      <g transform={`translate(${x},${y})`}>
+        {isTop && (
+          <rect x={-8} y={-9} width={5} height={18} rx={1.5} fill="var(--color-chart-4)" opacity={isActive ? 1 : 0.3} />
+        )}
+        <text
+          x={-14}
+          y={0}
+          dy={4}
+          textAnchor="end"
+          fill={isActive ? "var(--color-foreground)" : "var(--color-muted-foreground)"}
+          fontSize={isTop ? 12 : 11}
+          fontWeight={isTop ? 700 : 600}
+          style={{ letterSpacing: isTop ? "0.02em" : "0.01em" }}
+        >
+          {label}
+        </text>
+      </g>
+    );
+  };
+
 
   return (
     <ChartPanel
@@ -38,7 +65,7 @@ export function EquipoChart({ data }: { data: Movement[] }) {
         <BarChart data={agg} layout="vertical" margin={{ top: 4, right: 24, left: 0, bottom: 0 }} barCategoryGap={6}>
           <CartesianGrid stroke="var(--color-grid)" strokeDasharray="2 4" horizontal={false} />
           <XAxis type="number" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} tickFormatter={fmtCompact} />
-          <YAxis dataKey="short" type="category" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} width={280} interval={0} />
+          <YAxis dataKey="short" type="category" stroke="var(--color-muted-foreground)" tickLine={false} axisLine={false} width={320} interval={0} tick={<CustomTick />} />
           <Tooltip
             cursor={{ fill: "oklch(0.78 0.18 165 / 0.08)" }}
             content={({ active: a, payload }) => {
