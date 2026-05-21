@@ -36,7 +36,7 @@ export function EquipoChart({ data }: { data: Movement[] }) {
           dy={4}
           textAnchor="end"
           fill={isActive ? "var(--color-foreground)" : "var(--color-muted-foreground)"}
-          fontSize={isTop ? 12 : 11}
+          fontSize={isTop ? 10.8 : 9.9}
           fontWeight={isTop ? 700 : 600}
           style={{ letterSpacing: isTop ? "0.02em" : "0.01em" }}
         >
