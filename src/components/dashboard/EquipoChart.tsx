@@ -30,9 +30,6 @@ export function EquipoChart({ data }: { data: Movement[] }) {
     const isActive = active.size === 0 || active.has(equipo);
     return (
       <g transform={`translate(${x},${y})`}>
-        {isTop && (
-          <rect x={-8} y={-9} width={5} height={18} rx={1.5} fill="var(--color-chart-4)" opacity={isActive ? 1 : 0.3} />
-        )}
         <text
           x={-14}
           y={0}
