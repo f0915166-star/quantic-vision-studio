@@ -24,7 +24,7 @@ export function ParetoChart({ data }: { data: Movement[] }) {
   return (
     <ChartPanel
       title="Top bienes por costo"
-      subtitle="Ranking de impacto por bien. Click para drill-down"
+      
       kicker="Bienes"
       exportData={() => ({
         filename: "top-bienes.csv",
