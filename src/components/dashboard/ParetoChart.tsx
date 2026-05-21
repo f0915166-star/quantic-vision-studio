@@ -1,94 +1,72 @@
 import { useMemo } from "react";
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Cell, LabelList } from "recharts";
 import type { Movement } from "@/lib/data-types";
-import { fmtCompact, fmtCurrency, useData } from "@/lib/data-store";
+import { fmtCurrency, fmtCompact, useData } from "@/lib/data-store";
 import { ChartPanel } from "./ChartPanel";
-
-const PALETTE = [
-  "var(--color-chart-4)",
-  "var(--color-chart-2)",
-  "var(--color-chart-1)",
-  "var(--color-chart-3)",
-  "var(--color-chart-5)",
-  "var(--color-chart-6)",
-];
+import { motion } from "framer-motion";
 
 export function ParetoChart({ data }: { data: Movement[] }) {
-  const { toggleFilter, filters } = useData();
+  const { filters, toggleFilter } = useData();
 
-  const series = useMemo(() => {
-    const m = new Map<string, number>();
-    for (const r of data) m.set(r.bien, (m.get(r.bien) ?? 0) + r.costo);
-    const sorted = Array.from(m.entries())
-      .map(([bien, costo]) => ({ bien, costo }))
-      .sort((a, b) => b.costo - a.costo);
-    const arr = sorted.slice(0, 10);
-    const rest = sorted.slice(10);
-    if (rest.length) {
-      arr.push({ bien: "Otros", costo: rest.reduce((s, x) => s + x.costo, 0) });
+  const top = useMemo(() => {
+    const m = new Map<string, { bien: string; costo: number; n: number; responsables: Set<string> }>();
+    for (const r of data) {
+      const cur = m.get(r.bien) ?? { bien: r.bien, costo: 0, n: 0, responsables: new Set<string>() };
+      cur.costo += r.costo;
+      cur.n += 1;
+      if (r.responsable) cur.responsables.add(r.responsable);
+      m.set(r.bien, cur);
     }
-    const total = arr.reduce((s, x) => s + x.costo, 0);
-    let acc = 0;
-    return arr.map((x, i) => {
-      acc += x.costo;
-      return {
-        ...x,
-        pct: total ? (acc / total) * 100 : 0,
-        share: total ? (x.costo / total) * 100 : 0,
-        short: x.bien.length > 34 ? x.bien.slice(0, 34) + "…" : x.bien,
-        fill: PALETTE[i % PALETTE.length],
-      };
-    });
+    const arr = Array.from(m.values()).sort((a, b) => b.costo - a.costo);
+    const max = arr[0]?.costo ?? 1;
+    return arr.map(x => ({ ...x, respN: x.responsables.size, pct: (x.costo / max) * 100 }));
   }, [data]);
 
   return (
     <ChartPanel
-      title="Análisis Pareto — Top bienes"
-      subtitle="80/20: los pocos vitales del costo total"
-      kicker="Pareto 80/20"
+      title="Top bienes por costo"
+      subtitle="Ranking de impacto por bien. Click para drill-down"
+      kicker="Bienes"
       exportData={() => ({
-        filename: "pareto-bienes.csv",
-        csv: "bien,costo,share,acumulado\n" + series.map(r => `"${r.bien}",${r.costo.toFixed(2)},${r.share.toFixed(2)},${r.pct.toFixed(2)}`).join("\n"),
+        filename: "top-bienes.csv",
+        csv:
+          "bien,costo,movimientos,responsables\n" +
+          top.map(r => `"${r.bien.replace(/"/g, '""')}",${r.costo},${r.n},${r.respN}`).join("\n"),
       })}
     >
-      <ResponsiveContainer width="100%" height={420}>
-        <BarChart data={series} layout="vertical" margin={{ top: 4, right: 70, left: 0, bottom: 0 }} barCategoryGap={4}>
-          <CartesianGrid stroke="var(--color-grid)" strokeDasharray="2 4" horizontal={false} />
-          <XAxis type="number" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} tickFormatter={fmtCompact} />
-          <YAxis dataKey="short" type="category" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} width={220} interval={0} />
-          <Tooltip
-            cursor={{ fill: "oklch(0.78 0.18 165 / 0.08)" }}
-            content={({ active, payload }) => {
-              if (!active || !payload?.length) return null;
-              const p = payload[0].payload as { bien: string; costo: number; pct: number; share: number };
-              return (
-                <div className="panel px-3 py-2 text-xs font-mono max-w-xs">
-                  <div className="font-semibold mb-1 break-words">{p.bien}</div>
-                  <div className="flex justify-between gap-6"><span>Costo</span><span className="text-primary">{fmtCurrency(p.costo)}</span></div>
-                  <div className="flex justify-between gap-6"><span>% del total</span><span className="text-[color:var(--color-warning)]">{p.share.toFixed(1)}%</span></div>
-                  <div className="flex justify-between gap-6 text-muted-foreground"><span>Acumulado</span><span>{p.pct.toFixed(1)}%</span></div>
+      <div className="space-y-1.5 h-[420px] overflow-y-auto pr-1 -mr-1">
+        {top.length === 0 && (
+          <div className="text-xs text-muted-foreground py-6 text-center">Sin datos para el filtro actual.</div>
+        )}
+        {top.map((r, i) => {
+          const isActive = filters.biens.has(r.bien);
+          return (
+            <button
+              key={r.bien}
+              onClick={() => toggleFilter("biens", r.bien)}
+              className={`w-full text-left rounded-md px-3 py-2 transition-all relative overflow-hidden border ${isActive ? "border-primary bg-primary/10" : "border-transparent hover:border-border hover:bg-secondary/40"}`}
+            >
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${r.pct}%` }}
+                transition={{ duration: 0.7, ease: "easeOut" }}
+                className="absolute inset-y-0 left-0 opacity-15"
+                style={{
+                  background: `linear-gradient(90deg, var(--color-chart-${(i % 8) + 1}), transparent)`,
+                }}
+              />
+              <div className="relative flex items-center gap-3">
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-medium truncate">{r.bien || "(sin bien)"}</div>
+                  <div className="text-[10px] text-muted-foreground font-mono">
+                    {fmtCompact(r.n)} movs · {r.respN} responsables
+                  </div>
                 </div>
-              );
-            }}
-          />
-          <Bar dataKey="costo" radius={[0, 6, 6, 0]} cursor="pointer"
-            onClick={(d) => toggleFilter("biens", (d as { bien: string }).bien)}>
-            {series.map((s) => {
-              const selected = filters.biens.has(s.bien);
-              return (
-                <Cell key={s.bien}
-                  fill={s.fill}
-                  fillOpacity={filters.biens.size === 0 || selected ? 1 : 0.25}
-                  stroke={selected ? "var(--color-foreground)" : "transparent"}
-                  strokeWidth={1.2}
-                />
-              );
-            })}
-            <LabelList dataKey="costo" position="right" formatter={(v: number) => fmtCompact(v)}
-              style={{ fill: "var(--color-foreground)", fontSize: 10, fontFamily: "var(--font-mono)" }} />
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+                <div className="text-xs font-mono tabular-nums text-primary font-semibold">{fmtCurrency(r.costo)}</div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
     </ChartPanel>
   );
 }
