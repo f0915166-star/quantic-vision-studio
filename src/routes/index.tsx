@@ -42,6 +42,17 @@ function DashboardShell() {
       for (const r of filtered) (r.fecha < mid ? a += r.costo : b += r.costo);
       if (a > 0) delta = ((b - a) / a) * 100;
     }
+    // Equipo y bien con mayor costo
+    const equipoMap = new Map<string, number>();
+    const bienMap = new Map<string, number>();
+    for (const r of filtered) {
+      equipoMap.set(r.equipo, (equipoMap.get(r.equipo) ?? 0) + r.costo);
+      bienMap.set(r.bien, (bienMap.get(r.bien) ?? 0) + r.costo);
+    }
+    let topEquipo = ""; let topEquipoVal = 0;
+    equipoMap.forEach((v, k) => { if (v > topEquipoVal) { topEquipoVal = v; topEquipo = k; } });
+    let topBien = ""; let topBienVal = 0;
+    bienMap.forEach((v, k) => { if (v > topBienVal) { topBienVal = v; topBien = k; } });
     // Mes pico + promedio mensual
     const MES_ABBR = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
     const monthly = new Map<string, number>();
@@ -57,7 +68,7 @@ function DashboardShell() {
     const peakLabel = peakKey
       ? `${MES_ABBR[Number(peakKey.slice(5, 7)) - 1]} ${peakKey.slice(2, 4)}`
       : "—";
-    return { costo, bienes, equipos, resps, n: filtered.length, delta, avgMonth, monthsCount, peakLabel, peakVal };
+    return { costo, bienes, equipos, resps, n: filtered.length, delta, avgMonth, monthsCount, peakLabel, peakVal, topEquipo, topEquipoVal, topBien, topBienVal };
   }, [filtered]);
 
 
