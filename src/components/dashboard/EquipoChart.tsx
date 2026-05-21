@@ -58,9 +58,9 @@ export function EquipoChart({ data }: { data: Movement[] }) {
           agg.map(r => `"${r.equipo}",${r.combustible.toFixed(2)},${r.repuestos.toFixed(2)},${r.costo.toFixed(2)},${r.n}`).join("\n"),
       })}
     >
-      <div className="h-[440px] overflow-y-auto pr-1 -mr-1">
-        <ResponsiveContainer width="100%" height={Math.max(420, agg.length * 30)}>
-          <BarChart data={agg} layout="vertical" margin={{ top: 4, right: 24, left: 0, bottom: 0 }} barCategoryGap={6}>
+      <div className="w-full">
+        <ResponsiveContainer width="100%" height={Math.max(420, agg.length * 22)}>
+          <BarChart data={agg} layout="vertical" margin={{ top: 4, right: 24, left: 0, bottom: 0 }} barCategoryGap={3}>
             <CartesianGrid stroke="var(--color-grid)" strokeDasharray="2 4" horizontal={false} />
             <XAxis type="number" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} tickFormatter={fmtCompact} />
             <YAxis dataKey="short" type="category" stroke="var(--color-muted-foreground)" tickLine={false} axisLine={false} width={320} interval={0} tick={<CustomTick />} />
