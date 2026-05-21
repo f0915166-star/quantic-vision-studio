@@ -84,14 +84,14 @@ export function CategoriaDonut({ data, allData }: { data: Movement[]; allData: M
               paddingAngle={2}
               stroke="var(--color-background)"
               strokeWidth={2}
-              onClick={(d) => toggleFilter("categorias", (d as { key: string }).key)}
+              onClick={(d) => handleClick((d as { key: string }).key)}
               cursor="pointer"
             >
               {agg.map((d) => (
                 <Cell
                   key={d.key}
                   fill={d.fill}
-                  fillOpacity={active.size === 0 || active.has(d.key) ? 1 : 0.25}
+                  fillOpacity={isActive(d.key) ? 1 : 0.25}
                 />
               ))}
             </Pie>
