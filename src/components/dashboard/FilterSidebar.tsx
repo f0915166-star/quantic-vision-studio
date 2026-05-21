@@ -116,14 +116,29 @@ function Section({ icon, label, open, onToggle, count, children }: { icon: React
 
 function Chips({ items, active, onToggle }: { items: [string, number][]; active: Set<string>; onToggle: (v: string) => void }) {
   return (
-    <div className="flex flex-wrap gap-1.5">
-      {items.map(([v, n]) => (
-        <button key={v} onClick={() => onToggle(v)}
-          className={`chip ${active.has(v) ? "chip-active" : ""} hover:border-primary/50 max-w-full`}>
-          <span className="truncate max-w-[220px]">{v || "(sin valor)"}</span>
-          <span className="text-[10px] opacity-60 font-mono">{n}</span>
-        </button>
-      ))}
+    <div className="flex flex-col gap-1">
+      {items.map(([v, n]) => {
+        const checked = active.has(v);
+        return (
+          <label
+            key={v}
+            className={`flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer transition-colors border ${
+              checked
+                ? "bg-primary/10 border-primary/40"
+                : "bg-secondary/40 border-transparent hover:bg-secondary/70 hover:border-border"
+            }`}
+          >
+            <input
+              type="checkbox"
+              checked={checked}
+              onChange={() => onToggle(v)}
+              className="w-3.5 h-3.5 accent-primary cursor-pointer shrink-0"
+            />
+            <span className="truncate text-xs flex-1" title={v}>{v || "(sin valor)"}</span>
+            <span className="text-[10px] opacity-60 font-mono shrink-0">{n}</span>
+          </label>
+        );
+      })}
     </div>
   );
 }
