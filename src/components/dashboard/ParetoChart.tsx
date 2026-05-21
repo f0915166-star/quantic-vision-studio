@@ -22,7 +22,7 @@ export function ParetoChart({ data }: { data: Movement[] }) {
           <CartesianGrid stroke="var(--color-grid)" strokeDasharray="2 4" vertical={false} />
           <XAxis dataKey="short" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false}
             angle={-35} textAnchor="end" interval={0} height={60} />
-          <YAxis yAxisId="l" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} tickFormatter={fmtCompact} width={55} />
+          <YAxis yAxisId="l" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} tickFormatter={fmtCompact} width={55} scale="log" domain={[100, 'dataMax']} allowDataOverflow />
           <YAxis yAxisId="r" orientation="right" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} tickFormatter={v => `${v}%`} domain={[0, 100]} width={35} />
           <Tooltip
             cursor={{ fill: "oklch(0.78 0.18 165 / 0.08)" }}
