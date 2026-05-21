@@ -43,7 +43,7 @@ export function AreaDonut({ data }: { data: Movement[] }) {
   return (
     <ChartPanel
       title="Producción vs Mantenimiento"
-      subtitle="Distribución del costo por área. Click para filtrar"
+      
       kicker={<span className="inline-flex items-center gap-1"><PieIcon className="w-3 h-3" /> Áreas</span>}
       exportData={() => ({
         filename: "areas-donut.csv",

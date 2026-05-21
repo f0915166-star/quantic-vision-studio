@@ -21,7 +21,7 @@ export function ResponsableRanking({ data }: { data: Movement[] }) {
   return (
     <ChartPanel
       title="Top responsables por costo"
-      subtitle="Ranking de impacto individual. Click para drill-down"
+      
       kicker="Accountability"
       exportData={() => ({
         filename: "responsables.csv",
