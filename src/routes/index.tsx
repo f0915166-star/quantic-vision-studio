@@ -138,11 +138,11 @@ function DashboardShell() {
               <h2 className="text-2xl lg:text-3xl font-bold tracking-tight mt-1">
                 Costos de <span className="text-gradient">Repuestos & Combustible</span> · Flota móvil
               </h2>
-              <p className="text-sm text-muted-foreground mt-1">
-                {filtered.length === all.length
-                  ? "Vista completa · Cualquier elemento es interactivo y filtra todo el tablero"
-                  : `Filtro activo · ${fmtCompact(filtered.length)} de ${fmtCompact(all.length)} movimientos`}
-              </p>
+              {filtered.length !== all.length && (
+                <p className="text-sm text-muted-foreground mt-1">
+                  {`Filtro activo · ${fmtCompact(filtered.length)} de ${fmtCompact(all.length)} movimientos`}
+                </p>
+              )}
             </div>
             <button onClick={reset} className="text-xs text-muted-foreground hover:text-foreground transition-colors panel px-3 py-1.5">
               Reset visual
