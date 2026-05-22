@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Cell } from "recharts";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Cell, LabelList } from "recharts";
+
 import type { Movement } from "@/lib/data-types";
 import { fmtCompact, fmtCurrency, useData } from "@/lib/data-store";
 import { ChartPanel } from "./ChartPanel";
@@ -59,7 +60,7 @@ export function EquipoChart({ data }: { data: Movement[] }) {
     >
       <div className="w-full">
         <ResponsiveContainer width="100%" height={Math.max(420, agg.length * 22)}>
-          <BarChart data={agg} layout="vertical" margin={{ top: 4, right: 24, left: 0, bottom: 0 }} barCategoryGap={3}>
+          <BarChart data={agg} layout="vertical" margin={{ top: 4, right: 110, left: 0, bottom: 0 }} barCategoryGap={3}>
             <CartesianGrid stroke="var(--color-grid)" strokeDasharray="2 4" horizontal={false} />
             <XAxis type="number" stroke="var(--color-muted-foreground)" fontSize={10} tickLine={false} axisLine={false} tickFormatter={fmtCompact} />
             <YAxis dataKey="short" type="category" stroke="var(--color-muted-foreground)" tickLine={false} axisLine={false} width={320} interval={0} tick={<CustomTick />} />
@@ -74,7 +75,7 @@ export function EquipoChart({ data }: { data: Movement[] }) {
                     <div className="font-semibold mb-1 break-words text-foreground">{p.equipo}</div>
                     <div className="flex justify-between gap-6"><span style={{color:"var(--color-chart-1)"}}>● Combustible</span><span>{fmtCurrency(p.combustible)}</span></div>
                     <div className="flex justify-between gap-6"><span style={{color:"var(--color-chart-3)"}}>● Repuestos</span><span>{fmtCurrency(p.repuestos)}</span></div>
-                    <div className="border-t border-border mt-1 pt-1 flex justify-between gap-6"><span>Total</span><span className="text-primary">{fmtCurrency(p.costo)}</span></div>
+                    <div className="border-t border-border mt-1 pt-1 flex justify-between gap-6"><span>Total</span><span className="text-foreground font-semibold">{fmtCurrency(p.costo)}</span></div>
                     <div className="flex justify-between gap-6 text-muted-foreground"><span>% Combust.</span><span>{pctC.toFixed(1)}%</span></div>
                     <div className="flex justify-between gap-6 text-muted-foreground"><span>Movs</span><span>{p.n}</span></div>
                   </div>
@@ -95,10 +96,36 @@ export function EquipoChart({ data }: { data: Movement[] }) {
                   stroke="transparent"
                 />
               ))}
+              <LabelList
+                dataKey="costo"
+                position="right"
+                content={(props: unknown) => {
+                  const { x, y, width, height, value, index } = props as {
+                    x: number; y: number; width: number; height: number; value: number; index: number;
+                  };
+                  const isTop = index < 3;
+                  return (
+                    <text
+                      x={x + width + 8}
+                      y={y + height / 2}
+                      dy={3}
+                      textAnchor="start"
+                      fontSize={isTop ? 11 : 10}
+                      fontWeight={isTop ? 700 : 600}
+                      fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+                      fill="var(--color-foreground)"
+                      style={{ letterSpacing: "0.01em" }}
+                    >
+                      {fmtCurrency(value)}
+                    </text>
+                  );
+                }}
+              />
             </Bar>
           </BarChart>
         </ResponsiveContainer>
       </div>
+
       <div className="flex items-center justify-center gap-4 text-[10px] font-mono text-muted-foreground mt-2">
         <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{background:"var(--color-chart-1)"}}/> Combustible</span>
         <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{background:"var(--color-chart-3)"}}/> Repuestos</span>
