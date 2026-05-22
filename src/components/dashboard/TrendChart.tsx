@@ -31,7 +31,6 @@ export function TrendChart({ data }: { data: Movement[] }) {
   return (
     <ChartPanel
       title="Tendencia mensual de costo"
-      subtitle="Click en un mes para filtrar el periodo"
       kicker="Time series"
     >
       <ResponsiveContainer width="100%" height={300}>
