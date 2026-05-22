@@ -78,7 +78,7 @@ export function TrendChart({ data }: { data: Movement[] }) {
               );
             }}
           />
-          <Area type="monotone" dataKey="costo" stroke="var(--color-chart-1)" strokeWidth={2} fill="url(#gCost)" activeDot={{ r: 5, strokeWidth: 2, stroke: "var(--color-background)" }} />
+          <Area type="monotone" dataKey="costo" stroke="var(--color-chart-2)" strokeWidth={2} fill="url(#gCost)" activeDot={{ r: 5, strokeWidth: 2, stroke: "var(--color-background)" }} />
         </AreaChart>
       </ResponsiveContainer>
     </ChartPanel>
