@@ -119,7 +119,7 @@ function DashboardShell() {
             <div style={{ width: 1, height: 44, background: "rgba(255,255,255,0.22)", margin: "0 18px" }} className="hidden sm:block" />
             <div className="flex flex-col min-w-0">
               <h1 className="font-bold leading-tight text-white whitespace-nowrap" style={{ fontFamily: "Outfit, sans-serif", fontSize: "1.25rem", letterSpacing: "0.3px" }}>
-                Control de Costos de Coches de Cocción
+                Costos de <span style={{ color: "hsl(6 72% 58%)" }}>Repuestos & Combustible</span> · Flota móvil
               </h1>
               <p className="text-[0.7rem] font-medium uppercase whitespace-nowrap" style={{ letterSpacing: "0.08em", color: "rgba(255,255,255,0.55)" }}>
                 Planta Lark · Inversiones Norlima S.A.
