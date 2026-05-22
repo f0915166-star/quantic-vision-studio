@@ -47,8 +47,8 @@ export function TrendChart({ data }: { data: Movement[] }) {
           }}>
           <defs>
             <linearGradient id="gCost" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--color-chart-1)" stopOpacity={0.6} />
-              <stop offset="100%" stopColor="var(--color-chart-1)" stopOpacity={0} />
+              <stop offset="0%" stopColor="var(--color-chart-2)" stopOpacity={0.6} />
+              <stop offset="100%" stopColor="var(--color-chart-2)" stopOpacity={0} />
             </linearGradient>
           </defs>
           <CartesianGrid stroke="var(--color-grid)" strokeDasharray="2 4" vertical={false} />
@@ -78,7 +78,7 @@ export function TrendChart({ data }: { data: Movement[] }) {
               );
             }}
           />
-          <Area type="monotone" dataKey="costo" stroke="var(--color-chart-1)" strokeWidth={2} fill="url(#gCost)" activeDot={{ r: 5, strokeWidth: 2, stroke: "var(--color-background)" }} />
+          <Area type="monotone" dataKey="costo" stroke="var(--color-chart-2)" strokeWidth={2} fill="url(#gCost)" activeDot={{ r: 5, strokeWidth: 2, stroke: "var(--color-background)" }} />
         </AreaChart>
       </ResponsiveContainer>
     </ChartPanel>
