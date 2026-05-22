@@ -77,21 +77,26 @@ export function AreaDonut({ data }: { data: Movement[] }) {
               ))}
             </Pie>
             <Tooltip
-              wrapperStyle={{ zIndex: 50, outline: "none" }}
+              wrapperStyle={{ zIndex: 100, outline: "none", pointerEvents: "none" }}
               allowEscapeViewBox={{ x: true, y: true }}
+              offset={16}
               content={({ active: a, payload }) => {
                 if (!a || !payload?.length) return null;
-                const p = payload[0].payload as { area: string; costo: number; n: number; pct: number };
+                const p = payload[0].payload as { area: string; costo: number; n: number; pct: number; fill: string };
                 return (
-                  <div className="rounded-lg border border-border bg-card shadow-xl px-3 py-2 text-xs font-mono">
-                    <div className="font-semibold mb-1 text-foreground">{p.area}</div>
-                    <div className="flex justify-between gap-6"><span className="text-muted-foreground">Costo</span><span className="text-primary font-semibold">{fmtCurrency(p.costo)}</span></div>
+                  <div className="rounded-lg border border-border bg-popover text-popover-foreground shadow-2xl px-3 py-2 text-xs font-mono min-w-[180px]">
+                    <div className="flex items-center gap-2 mb-1.5 pb-1.5 border-b border-border">
+                      <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: p.fill }} />
+                      <span className="font-semibold text-foreground uppercase tracking-wide text-[11px]">{p.area}</span>
+                    </div>
+                    <div className="flex justify-between gap-6"><span className="text-muted-foreground">Costo</span><span className="text-foreground font-semibold">{fmtCurrency(p.costo)}</span></div>
                     <div className="flex justify-between gap-6"><span className="text-muted-foreground">%</span><span className="text-foreground">{p.pct.toFixed(1)}%</span></div>
                     <div className="flex justify-between gap-6"><span className="text-muted-foreground">Movs</span><span className="text-foreground">{p.n}</span></div>
                   </div>
                 );
               }}
             />
+
           </PieChart>
         </ResponsiveContainer>
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
