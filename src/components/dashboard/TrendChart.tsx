@@ -31,7 +31,7 @@ export function TrendChart({ data }: { data: Movement[] }) {
   return (
     <ChartPanel
       title="Tendencia mensual de costo"
-      kicker="Time series"
+      kicker="Serie temporal"
     >
       <ResponsiveContainer width="100%" height={300}>
         <AreaChart data={series} margin={{ top: 10, right: 10, left: 0, bottom: 28 }}
