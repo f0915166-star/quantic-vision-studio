@@ -42,7 +42,7 @@ export function AreaDonut({ data }: { data: Movement[] }) {
 
   return (
     <ChartPanel
-      title="Producción vs Mantenimiento"
+      title="Costos: Producción vs Mantenimiento"
       
       kicker={<span className="inline-flex items-center gap-1"><PieIcon className="w-3 h-3" /> Áreas</span>}
       exportData={() => ({

@@ -20,9 +20,9 @@ export function ResponsableRanking({ data }: { data: Movement[] }) {
 
   return (
     <ChartPanel
-      title="Top responsables por costo"
+      title="Responsables con mayor costo"
       
-      kicker="Accountability"
+      kicker="Responsables"
       exportData={() => ({
         filename: "responsables.csv",
         csv: "responsable,costo,movimientos,bienes_unicos\n" + top.map(r => `"${r.responsable}",${r.costo},${r.n},${r.bienesN}`).join("\n"),
