@@ -102,20 +102,20 @@
     font-family: var(--font-display);
     font-feature-settings: "ss01", "cv11";
     background-image:
-      radial-gradient(circle at 15% 0%, oklch(0.78 0.18 165 / 0.06), transparent 40%),
-      radial-gradient(circle at 85% 100%, oklch(0.72 0.18 235 / 0.05), transparent 40%);
+      radial-gradient(circle at 15% 0%, hsl(6 72% 48% / 0.06), transparent 40%),
+      radial-gradient(circle at 85% 100%, hsl(42 92% 52% / 0.06), transparent 40%);
     background-attachment: fixed;
   }
-  ::selection { background: oklch(0.78 0.18 165 / 0.3); }
+  ::selection { background: hsl(42 92% 52% / 0.3); }
 
   /* Scrollbar */
   ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
-    background: oklch(0.3 0.018 250 / 0.6);
+    background: hsl(30 18% 75% / 0.7);
     border-radius: 10px;
   }
-  ::-webkit-scrollbar-thumb:hover { background: oklch(0.4 0.02 250 / 0.8); }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(25 25% 55% / 0.8); }
 }
 
 @layer components {
