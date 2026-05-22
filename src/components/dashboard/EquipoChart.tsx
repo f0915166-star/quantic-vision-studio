@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Cell } from "recharts";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Cell, LabelList } from "recharts";
+
 import type { Movement } from "@/lib/data-types";
 import { fmtCompact, fmtCurrency, useData } from "@/lib/data-store";
 import { ChartPanel } from "./ChartPanel";
