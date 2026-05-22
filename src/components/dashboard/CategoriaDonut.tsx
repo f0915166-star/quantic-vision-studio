@@ -96,15 +96,17 @@ export function CategoriaDonut({ data, allData }: { data: Movement[]; allData: M
               ))}
             </Pie>
             <Tooltip
+              wrapperStyle={{ zIndex: 50, outline: "none" }}
+              allowEscapeViewBox={{ x: true, y: true }}
               content={({ active: a, payload }) => {
                 if (!a || !payload?.length) return null;
                 const p = payload[0].payload as { label: string; costo: number; n: number; pct: number };
                 return (
-                  <div className="panel px-3 py-2 text-xs font-mono">
-                    <div className="font-semibold mb-1">{p.label}</div>
-                    <div className="flex justify-between gap-6"><span>Costo</span><span className="text-primary">{fmtCurrency(p.costo)}</span></div>
-                    <div className="flex justify-between gap-6"><span>%</span><span className="text-[color:var(--color-warning)]">{p.pct.toFixed(1)}%</span></div>
-                    <div className="flex justify-between gap-6 text-muted-foreground"><span>Movs</span><span>{p.n}</span></div>
+                  <div className="rounded-lg border border-border bg-card shadow-xl px-3 py-2 text-xs font-mono">
+                    <div className="font-semibold mb-1 text-foreground">{p.label}</div>
+                    <div className="flex justify-between gap-6"><span className="text-muted-foreground">Costo</span><span className="text-primary font-semibold">{fmtCurrency(p.costo)}</span></div>
+                    <div className="flex justify-between gap-6"><span className="text-muted-foreground">%</span><span className="text-foreground">{p.pct.toFixed(1)}%</span></div>
+                    <div className="flex justify-between gap-6"><span className="text-muted-foreground">Movs</span><span className="text-foreground">{p.n}</span></div>
                   </div>
                 );
               }}
