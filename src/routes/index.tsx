@@ -144,7 +144,7 @@ function DashboardShell() {
               title="Filtros"
             >
               <Filter className="w-3.5 h-3.5" style={{ color: "hsl(42 92% 62%)" }} />
-              <span className="hidden sm:inline">Filtros</span>
+              
               {activeCount > 0 && (
                 <span
                   className="rounded-full px-1.5 text-[10px] font-mono font-bold"
