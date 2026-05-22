@@ -15,7 +15,7 @@ import { AreaDonut } from "@/components/dashboard/AreaDonut";
 import { CategoriaDonut } from "@/components/dashboard/CategoriaDonut";
 import { TopTable } from "@/components/dashboard/TopTable";
 import { FilterSidebar } from "@/components/dashboard/FilterSidebar";
-import { Activity, DollarSign, Truck, Layers, Filter, TrendingUp, CalendarRange } from "lucide-react";
+import { Activity, Truck, Layers, Filter, TrendingUp, CalendarRange } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: () => (
@@ -165,7 +165,7 @@ function DashboardShell() {
 
         {/* KPI ROW */}
         <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-          <KpiCard label="Costo total" value={fmtCurrency(stats.costo)} sublabel="vs primer semestre" delta={stats.delta} icon={<DollarSign className="w-4 h-4" />} accent="primary" />
+          <KpiCard label="Costo total" value={fmtCurrency(stats.costo)} sublabel="vs primer semestre" delta={stats.delta} icon={<span className="font-bold text-[13px] leading-none tracking-tight">S/.</span>} accent="primary" />
           <KpiCard label="Promedio mensual" value={fmtCurrency(stats.avgMonth)} sublabel={`${stats.monthsCount} meses activos`} icon={<TrendingUp className="w-4 h-4" />} accent="accent" />
           <KpiCard label="Mes pico" value={stats.peakLabel} sublabel={fmtCurrency(stats.peakVal)} icon={<CalendarRange className="w-4 h-4" />} accent="warning" />
           <KpiCard label="Movimientos" value={fmtCompact(stats.n)} sublabel="registros operativos" icon={<Activity className="w-4 h-4" />} accent="accent" />
