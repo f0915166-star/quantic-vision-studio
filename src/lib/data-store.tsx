@@ -19,38 +19,47 @@ interface Ctx {
 
 const DataCtx = createContext<Ctx | null>(null);
 
-export function DataProvider({ children }: { children: ReactNode }) {
-  const [loading, setLoading] = useState(true);
+function hydrate(p: DataPayload): Movement[] {
+  return p.rows.map(r => ({
+    categoria: p.cats[r[0]],
+    area: p.areas[r[1]],
+    bien: p.biens[r[2]],
+    responsable: p.resps[r[3]],
+    equipo: p.equipos[r[4]],
+    concepto: p.conceptos[r[5]],
+    fecha: r[6],
+    cantidad: r[7],
+    costo: r[8],
+    unidad: p.unidades?.[r[9]] ?? "",
+  }));
+}
+
+declare global {
+  interface Window { __EMBED_DATA__?: DataPayload }
+}
+
+export function DataProvider({ children, initialData }: { children: ReactNode; initialData?: DataPayload }) {
+  const embed = initialData ?? (typeof window !== "undefined" ? window.__EMBED_DATA__ : undefined);
+  const [loading, setLoading] = useState(!embed);
   const [error, setError] = useState<string | null>(null);
-  const [all, setAll] = useState<Movement[]>([]);
+  const [all, setAll] = useState<Movement[]>(() => embed ? hydrate(embed) : []);
   const [filters, setFilters] = useState<FilterState>(emptyFilters());
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(embed ? new Date() : null);
 
   useEffect(() => {
+    if (embed) return;
     let alive = true;
     fetch("/data/consolidado.json")
       .then(r => r.json() as Promise<DataPayload>)
       .then(p => {
         if (!alive) return;
-        const movements: Movement[] = p.rows.map(r => ({
-          categoria: p.cats[r[0]],
-          area: p.areas[r[1]],
-          bien: p.biens[r[2]],
-          responsable: p.resps[r[3]],
-          equipo: p.equipos[r[4]],
-          concepto: p.conceptos[r[5]],
-          fecha: r[6],
-          cantidad: r[7],
-          costo: r[8],
-          unidad: p.unidades?.[r[9]] ?? "",
-        }));
-        setAll(movements);
+        setAll(hydrate(p));
         setLastUpdated(new Date());
         setLoading(false);
       })
       .catch(e => { if (alive) { setError(String(e)); setLoading(false); } });
     return () => { alive = false; };
-  }, []);
+  }, [embed]);
 
   const filtered = useMemo(() => {
     const { categorias, areas, equipos, biens, responsables, dateFrom, dateTo } = filters;
