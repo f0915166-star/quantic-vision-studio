@@ -4,7 +4,38 @@ import type { Movement } from "@/lib/data-types";
 import { fmtCurrency, useData } from "@/lib/data-store";
 import { ChartPanel } from "./ChartPanel";
 
-const COLORS = ["var(--color-chart-1)", "var(--color-chart-2)", "var(--color-chart-3)", "var(--color-chart-4)", "var(--color-chart-5)", "var(--color-chart-6)", "var(--color-chart-7)", "var(--color-chart-8)"];
+// Paleta extendida: 8 hues base × variaciones de luminosidad/croma para evitar
+// colores repetidos. Ordenada para alternar familias y maximizar contraste vecinal.
+const COLORS = [
+  "hsl(8 68% 52%)",    // terracotta
+  "hsl(195 45% 38%)",  // deep teal
+  "hsl(38 78% 56%)",   // warm amber
+  "hsl(220 28% 32%)",  // slate indigo
+  "hsl(160 35% 42%)",  // sage
+  "hsl(280 22% 52%)",  // dusty plum
+  "hsl(25 55% 58%)",   // clay
+  "hsl(210 30% 50%)",  // steel blue
+  "hsl(15 60% 42%)",   // burnt sienna
+  "hsl(185 38% 48%)",  // muted cyan
+  "hsl(45 70% 48%)",   // mustard
+  "hsl(235 22% 45%)",  // indigo mid
+  "hsl(150 30% 55%)",  // soft mint
+  "hsl(300 18% 42%)",  // deep mauve
+  "hsl(30 45% 48%)",   // bronze
+  "hsl(200 35% 60%)",  // sky steel
+  "hsl(0 50% 60%)",    // rose clay
+  "hsl(175 32% 32%)",  // dark teal
+  "hsl(50 60% 65%)",   // soft gold
+  "hsl(250 25% 55%)",  // periwinkle
+  "hsl(140 28% 38%)",  // forest
+  "hsl(265 28% 62%)",  // lavender
+  "hsl(18 48% 65%)",   // peach
+  "hsl(205 40% 28%)",  // navy depth
+  "hsl(168 28% 50%)",  // jade
+  "hsl(35 35% 38%)",   // umber
+  "hsl(290 30% 70%)",  // pale orchid
+  "hsl(190 50% 28%)",  // petrol
+];
 
 // Compresión visual: raíz cuadrada reduce el dominio del cuadro más grande
 // y da más espacio a las categorías menores sin alterar el dato real.
