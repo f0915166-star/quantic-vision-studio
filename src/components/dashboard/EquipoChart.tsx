@@ -50,7 +50,6 @@ export function EquipoChart({ data }: { data: Movement[] }) {
   return (
     <ChartPanel
       title="Costo total por Equipo Móvil"
-      subtitle="Desglose combustible vs. repuestos. Click para aislar un equipo"
       kicker={<span className="inline-flex items-center gap-1"><Truck className="w-3 h-3" /> Flota</span>}
       exportData={() => ({
         filename: "equipos.csv",
