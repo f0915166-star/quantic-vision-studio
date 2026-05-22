@@ -76,15 +76,15 @@
   --ring: hsl(6 72% 48%);
   --grid: hsl(30 18% 88% / 0.6);
 
-  /* Brand-aligned analytic palette */
-  --chart-1: hsl(6 72% 48%);     /* salmon */
-  --chart-2: hsl(25 55% 38%);    /* warm teal/brown */
-  --chart-3: hsl(42 92% 52%);    /* mustard */
-  --chart-4: hsl(25 40% 22%);    /* navy-brown */
-  --chart-5: hsl(15 60% 55%);    /* coral */
-  --chart-6: hsl(35 70% 55%);    /* amber */
-  --chart-7: hsl(180 30% 40%);   /* muted teal */
-  --chart-8: hsl(25 30% 60%);    /* warm taupe */
+  /* Refined professional analytic palette — warm + sophisticated */
+  --chart-1: hsl(8 68% 52%);     /* terracotta */
+  --chart-2: hsl(195 45% 38%);   /* deep teal */
+  --chart-3: hsl(38 78% 56%);    /* warm amber */
+  --chart-4: hsl(220 28% 32%);   /* slate indigo */
+  --chart-5: hsl(160 35% 42%);   /* sage */
+  --chart-6: hsl(25 55% 58%);    /* clay */
+  --chart-7: hsl(280 20% 50%);   /* dusty plum */
+  --chart-8: hsl(40 25% 55%);    /* warm taupe */
 
   --gradient-primary: linear-gradient(135deg, hsl(6 72% 48%), hsl(42 92% 52%));
   --gradient-surface: linear-gradient(180deg, #ffffff, hsl(40 28% 98%));
