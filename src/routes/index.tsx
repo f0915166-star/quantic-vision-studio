@@ -119,7 +119,7 @@ function DashboardShell() {
             <div style={{ width: 1, height: 44, background: "rgba(255,255,255,0.22)", margin: "0 18px" }} className="hidden sm:block" />
             <div className="flex flex-col min-w-0">
               <h1 className="font-bold leading-tight text-white whitespace-nowrap" style={{ fontFamily: "Outfit, sans-serif", fontSize: "1.25rem", letterSpacing: "0.3px" }}>
-                Control de Costos de Coches de Cocción
+                Costos de <span style={{ color: "hsl(6 72% 58%)" }}>Repuestos & Combustible</span> · Flota móvil
               </h1>
               <p className="text-[0.7rem] font-medium uppercase whitespace-nowrap" style={{ letterSpacing: "0.08em", color: "rgba(255,255,255,0.55)" }}>
                 Planta Lark · Inversiones Norlima S.A.
@@ -152,17 +152,13 @@ function DashboardShell() {
                   <span className="bg-primary text-primary-foreground rounded-full px-1.5 text-[10px] font-mono">{activeCount}</span>
                 )}
               </button>
-              <div>
-                <div className="text-[10px] uppercase tracking-[0.25em] text-primary font-semibold">Dashboard ejecutivo</div>
-                <h2 className="text-2xl lg:text-3xl font-bold tracking-tight mt-1">
-                  Costos de <span className="text-gradient">Repuestos & Combustible</span> · Flota móvil
-                </h2>
-                {filtered.length !== all.length && (
-                  <p className="text-sm text-muted-foreground mt-1">
+              {filtered.length !== all.length && (
+                <div className="mt-2">
+                  <p className="text-sm text-muted-foreground">
                     {`Filtro activo · ${fmtCompact(filtered.length)} de ${fmtCompact(all.length)} movimientos`}
                   </p>
-                )}
-              </div>
+                </div>
+              )}
             </div>
             <button onClick={reset} className="text-xs text-muted-foreground hover:text-foreground transition-colors panel px-3 py-1.5">
               Reset visual
