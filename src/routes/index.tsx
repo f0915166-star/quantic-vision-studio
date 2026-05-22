@@ -170,18 +170,6 @@ function DashboardShell() {
       </header>
 
       <main className="px-4 lg:px-8 py-6 space-y-5 max-w-[1800px] mx-auto">
-        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="flex items-center justify-between gap-4 flex-wrap">
-            {filtered.length !== all.length ? (
-              <p className="text-xs text-muted-foreground">
-                {`Filtro activo · ${fmtCompact(filtered.length)} de ${fmtCompact(all.length)} movimientos`}
-              </p>
-            ) : <span />}
-            <button onClick={reset} className="text-[11px] text-muted-foreground hover:text-foreground transition-colors px-2.5 py-1 rounded-md hover:bg-secondary">
-              Reset visual
-            </button>
-          </div>
-        </motion.div>
 
 
         <ActiveFilters />
