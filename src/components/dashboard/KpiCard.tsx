@@ -36,7 +36,7 @@ export function KpiCard({ label, value, sublabel, delta, icon, accent = "primary
         <span className="text-[11px] uppercase tracking-[0.15em] text-muted-foreground font-medium">{label}</span>
         {icon && <span className="text-muted-foreground group-hover:text-primary transition-colors">{icon}</span>}
       </div>
-      <div className="relative font-mono text-3xl font-semibold tabular-nums tracking-tight break-words" style={{ fontSize: value.length > 12 ? `${Math.max(14, 30 - (value.length - 12) * 1.1)}px` : undefined, lineHeight: 1.1 }}>{value}</div>
+      <div className="relative font-mono font-semibold tabular-nums tracking-tight whitespace-nowrap overflow-hidden text-ellipsis" style={{ fontSize: value.length > 10 ? `${Math.max(15, 28 - (value.length - 10) * 1.4)}px` : "28px", lineHeight: 1.15 }}>{value}</div>
       <div className="relative mt-2 flex items-center gap-2 text-xs">
         {delta != null && (
           <span className={`inline-flex items-center gap-1 ${trendColor} font-medium`}>
