@@ -98,10 +98,12 @@ function DashboardShell() {
 
       {/* TOP HEADER — estilo Norlima */}
       <header
-        className="sticky top-0 z-40 px-4 lg:px-8 py-3.5 text-white"
+        className="sticky top-0 z-40 px-4 lg:px-8 py-3 text-white"
         style={{
-          background: "linear-gradient(135deg, hsl(25 40% 14%) 0%, hsl(25 35% 22%) 100%)",
-          boxShadow: "0 12px 32px -12px hsl(25 35% 18% / 0.35)",
+          background:
+            "linear-gradient(115deg, hsl(25 45% 11%) 0%, hsl(25 38% 19%) 55%, hsl(20 50% 25%) 100%)",
+          boxShadow: "0 10px 30px -14px hsl(25 35% 8% / 0.6)",
+          borderBottom: "1px solid hsl(6 72% 48% / 0.4)",
         }}
       >
         <div className="max-w-[1800px] mx-auto flex items-center justify-between gap-4">
@@ -109,33 +111,59 @@ function DashboardShell() {
             <div
               className="flex items-center justify-center font-bold tracking-tight shrink-0"
               style={{
-                height: 52, minWidth: 52, padding: "0 14px", borderRadius: 10,
-                background: "hsl(6 72% 48%)", color: "#fff", fontFamily: "Outfit, sans-serif",
-                fontSize: 18, letterSpacing: "0.5px",
+                height: 46, minWidth: 46, padding: "0 13px", borderRadius: 10,
+                background: "linear-gradient(135deg, hsl(6 80% 54%), hsl(12 78% 42%))",
+                color: "#fff", fontFamily: "Outfit, sans-serif",
+                fontSize: 16, letterSpacing: "0.6px",
+                boxShadow: "0 6px 18px -6px hsl(6 72% 38% / 0.7)",
               }}
             >
               NORLIMA
             </div>
-            <div style={{ width: 1, height: 44, background: "rgba(255,255,255,0.22)", margin: "0 18px" }} className="hidden sm:block" />
+            <div style={{ width: 1, height: 40, background: "rgba(255,255,255,0.16)", margin: "0 16px" }} className="hidden sm:block" />
             <div className="flex flex-col min-w-0">
-              <h1 className="font-bold leading-tight text-white whitespace-nowrap" style={{ fontFamily: "Outfit, sans-serif", fontSize: "1.25rem", letterSpacing: "0.3px" }}>
-                Costos de <span style={{ color: "hsl(6 72% 58%)" }}>Repuestos & Combustible</span> · Flota móvil
+              <h1 className="font-bold leading-tight text-white whitespace-nowrap" style={{ fontFamily: "Outfit, sans-serif", fontSize: "1.18rem", letterSpacing: "0.3px" }}>
+                Costos de <span style={{ color: "hsl(6 80% 64%)" }}>Repuestos & Combustible</span> · Flota móvil
               </h1>
-              <p className="text-[0.7rem] font-medium uppercase whitespace-nowrap" style={{ letterSpacing: "0.08em", color: "rgba(255,255,255,0.55)" }}>
+              <p className="text-[0.65rem] font-medium uppercase whitespace-nowrap" style={{ letterSpacing: "0.12em", color: "rgba(255,255,255,0.48)" }}>
                 Planta Lark · Inversiones Norlima S.A.
               </p>
             </div>
           </div>
-          <div className="hidden md:flex items-center shrink-0">
-            <div
-              className="flex items-center gap-1.5 font-bold whitespace-nowrap"
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => setSidebarOpen(v => !v)}
+              className="relative inline-flex items-center gap-1.5 text-[11px] font-semibold transition-all hover:bg-white/10"
               style={{
-                background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)",
-                borderRadius: 9999, padding: "0.45rem 1.1rem", fontSize: "0.72rem",
-                letterSpacing: "0.05em", color: "rgba(255,255,255,0.8)",
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.14)",
+                borderRadius: 8,
+                padding: "0.38rem 0.7rem",
+                color: "rgba(255,255,255,0.9)",
+              }}
+              title="Filtros"
+            >
+              <Filter className="w-3.5 h-3.5" style={{ color: "hsl(42 92% 62%)" }} />
+              <span className="hidden sm:inline">Filtros</span>
+              {activeCount > 0 && (
+                <span
+                  className="rounded-full px-1.5 text-[10px] font-mono font-bold"
+                  style={{ background: "hsl(6 80% 54%)", color: "#fff" }}
+                >
+                  {activeCount}
+                </span>
+              )}
+            </button>
+            <div
+              className="hidden md:flex items-center font-semibold whitespace-nowrap"
+              style={{
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.12)",
+                borderRadius: 9999, padding: "0.38rem 0.9rem", fontSize: "0.7rem",
+                letterSpacing: "0.04em", color: "hsl(42 92% 64%)",
               }}
             >
-              Datos al&nbsp;<strong style={{ color: "hsl(42 92% 60%)" }}>{todayText}</strong>
+              {todayText}
             </div>
           </div>
         </div>
@@ -143,24 +171,13 @@ function DashboardShell() {
 
       <main className="px-4 lg:px-8 py-6 space-y-5 max-w-[1800px] mx-auto">
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="flex items-end justify-between gap-4 flex-wrap mb-1">
-            <div className="flex items-start gap-4">
-              <button onClick={() => setSidebarOpen(v => !v)}
-                className="panel px-3 py-2 flex items-center gap-2 text-xs font-semibold hover:panel-glow transition-all mt-1">
-                <Filter className="w-3.5 h-3.5 text-primary" /> Filtros
-                {activeCount > 0 && (
-                  <span className="bg-primary text-primary-foreground rounded-full px-1.5 text-[10px] font-mono">{activeCount}</span>
-                )}
-              </button>
-              {filtered.length !== all.length && (
-                <div className="mt-2">
-                  <p className="text-sm text-muted-foreground">
-                    {`Filtro activo · ${fmtCompact(filtered.length)} de ${fmtCompact(all.length)} movimientos`}
-                  </p>
-                </div>
-              )}
-            </div>
-            <button onClick={reset} className="text-xs text-muted-foreground hover:text-foreground transition-colors panel px-3 py-1.5">
+          <div className="flex items-center justify-between gap-4 flex-wrap">
+            {filtered.length !== all.length ? (
+              <p className="text-xs text-muted-foreground">
+                {`Filtro activo · ${fmtCompact(filtered.length)} de ${fmtCompact(all.length)} movimientos`}
+              </p>
+            ) : <span />}
+            <button onClick={reset} className="text-[11px] text-muted-foreground hover:text-foreground transition-colors px-2.5 py-1 rounded-md hover:bg-secondary">
               Reset visual
             </button>
           </div>
