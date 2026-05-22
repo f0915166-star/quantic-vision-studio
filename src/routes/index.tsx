@@ -90,9 +90,56 @@ function DashboardShell() {
   
   const activeCount = filters.categorias.size + filters.equipos.size + filters.areas.size + filters.biens.size + filters.responsables.size;
 
+  const todayText = new Date().toLocaleDateString("es-PE", { day: "2-digit", month: "long", year: "numeric" });
+
   return (
     <div className="min-h-screen">
       <FilterSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      {/* TOP HEADER — estilo Norlima */}
+      <header
+        className="sticky top-0 z-40 px-4 lg:px-8 py-3.5 text-white"
+        style={{
+          background: "linear-gradient(135deg, hsl(25 40% 14%) 0%, hsl(25 35% 22%) 100%)",
+          boxShadow: "0 12px 32px -12px hsl(25 35% 18% / 0.35)",
+        }}
+      >
+        <div className="max-w-[1800px] mx-auto flex items-center justify-between gap-4">
+          <div className="flex items-center min-w-0">
+            <div
+              className="flex items-center justify-center font-bold tracking-tight shrink-0"
+              style={{
+                height: 52, minWidth: 52, padding: "0 14px", borderRadius: 10,
+                background: "hsl(6 72% 48%)", color: "#fff", fontFamily: "Outfit, sans-serif",
+                fontSize: 18, letterSpacing: "0.5px",
+              }}
+            >
+              NORLIMA
+            </div>
+            <div style={{ width: 1, height: 44, background: "rgba(255,255,255,0.22)", margin: "0 18px" }} className="hidden sm:block" />
+            <div className="flex flex-col min-w-0">
+              <h1 className="font-bold leading-tight text-white whitespace-nowrap" style={{ fontFamily: "Outfit, sans-serif", fontSize: "1.25rem", letterSpacing: "0.3px" }}>
+                Control de Costos de Coches de Cocción
+              </h1>
+              <p className="text-[0.7rem] font-medium uppercase whitespace-nowrap" style={{ letterSpacing: "0.08em", color: "rgba(255,255,255,0.55)" }}>
+                Planta Lark · Inversiones Norlima S.A.
+              </p>
+            </div>
+          </div>
+          <div className="hidden md:flex items-center shrink-0">
+            <div
+              className="flex items-center gap-1.5 font-bold whitespace-nowrap"
+              style={{
+                background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)",
+                borderRadius: 9999, padding: "0.45rem 1.1rem", fontSize: "0.72rem",
+                letterSpacing: "0.05em", color: "rgba(255,255,255,0.8)",
+              }}
+            >
+              Datos al&nbsp;<strong style={{ color: "hsl(42 92% 60%)" }}>{todayText}</strong>
+            </div>
+          </div>
+        </div>
+      </header>
 
       <main className="px-4 lg:px-8 py-6 space-y-5 max-w-[1800px] mx-auto">
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
@@ -122,6 +169,7 @@ function DashboardShell() {
             </button>
           </div>
         </motion.div>
+
 
         <ActiveFilters />
 
