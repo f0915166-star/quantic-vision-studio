@@ -154,17 +154,6 @@ function DashboardShell() {
                 </span>
               )}
             </button>
-            <div
-              className="hidden md:flex items-center font-semibold whitespace-nowrap"
-              style={{
-                background: "rgba(255,255,255,0.05)",
-                border: "1px solid rgba(255,255,255,0.12)",
-                borderRadius: 9999, padding: "0.38rem 0.9rem", fontSize: "0.7rem",
-                letterSpacing: "0.04em", color: "hsl(42 92% 64%)",
-              }}
-            >
-              {todayText}
-            </div>
           </div>
         </div>
       </header>
