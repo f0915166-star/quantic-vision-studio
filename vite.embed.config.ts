@@ -10,7 +10,10 @@ export default defineConfig({
   base: "./",
   plugins: [react(), tailwindcss(), tsconfigPaths({ root: __dirname }), viteSingleFile()],
   resolve: {
-    alias: { "@": path.resolve(__dirname, "src") },
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+      "@/lib/chat.functions": path.resolve(__dirname, "embed/chat-shim.ts"),
+    },
   },
   build: {
     outDir: path.resolve(__dirname, "dist-embed"),
