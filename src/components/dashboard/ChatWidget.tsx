@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { MessageSquare, X, Send, Sparkles, Loader2 } from "lucide-react";
 import { useData } from "@/lib/data-store";
 import { buildDashboardContext } from "@/lib/chat-context";
-import { askDashboard } from "@/lib/chat.functions";
+
 
 interface Msg { role: "user" | "assistant"; content: string }
 
@@ -29,7 +29,7 @@ declare global {
   }
 }
 
-function callAI(question: string, context: string): Promise<string> {
+async function callAI(question: string, context: string): Promise<string> {
   // Apps Script mode
   if (typeof window !== "undefined" && window.google?.script?.run) {
     return new Promise((resolve, reject) => {
@@ -39,8 +39,10 @@ function callAI(question: string, context: string): Promise<string> {
         .askAI(question, context);
     });
   }
-  // TanStack Start serverFn (dev / web)
-  return askDashboard({ data: { question, context } }).then(r => r.answer);
+  // TanStack Start serverFn (dev / web) — lazy import so embed bundle stays clean
+  const mod = await import("@/lib/chat.functions");
+  const r = await mod.askDashboard({ data: { question, context } });
+  return r.answer;
 }
 
 export function ChatWidget() {
