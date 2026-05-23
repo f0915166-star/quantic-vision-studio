@@ -11,6 +11,7 @@ import { AreaDonut } from "@/components/dashboard/AreaDonut";
 import { CategoriaDonut } from "@/components/dashboard/CategoriaDonut";
 import { TopTable } from "@/components/dashboard/TopTable";
 import { FilterSidebar } from "@/components/dashboard/FilterSidebar";
+import { ChatWidget } from "@/components/dashboard/ChatWidget";
 import { Activity, Truck, Layers, Filter, TrendingUp, CalendarRange } from "lucide-react";
 
 export function DashboardShell() {
@@ -167,6 +168,8 @@ export function DashboardShell() {
           NEXUS·OPS v1.1 · Esquema BIEN · CATEGORIA · FECHA_MOVIMIENTO · COSTO_TOTAL · CONCEPTO · AREA_RESPONSABLE · RESPONSABLE · Última sincronización {lastUpdated?.toLocaleString("es-PE")}
         </footer>
       </main>
+
+      <ChatWidget />
     </div>
   );
 }
