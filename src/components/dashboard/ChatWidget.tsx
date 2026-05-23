@@ -15,6 +15,7 @@ const SUGGESTIONS = [
 
 declare global {
   interface Window {
+    __askDashboard__?: (q: string, c: string) => Promise<string>;
     google?: {
       script?: {
         run?: {
@@ -39,11 +40,11 @@ async function callAI(question: string, context: string): Promise<string> {
         .askAI(question, context);
     });
   }
-  // TanStack Start serverFn (dev / web) — dynamic import path hidden from bundler
-  const modPath = "@/lib/chat.functions";
-  const mod = await import(/* @vite-ignore */ modPath) as typeof import("@/lib/chat.functions");
-  const r = await mod.askDashboard({ data: { question, context } });
-  return r.answer;
+  // Web / dev mode — provided by the host (src/routes/index.tsx)
+  if (typeof window !== "undefined" && window.__askDashboard__) {
+    return window.__askDashboard__(question, context);
+  }
+  throw new Error("Asistente no disponible en este entorno.");
 }
 
 export function ChatWidget() {
