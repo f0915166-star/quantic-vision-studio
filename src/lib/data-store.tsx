@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState, useCallback, t
 import type { DataPayload, FilterState, Movement } from "./data-types";
 import { emptyFilters } from "./data-types";
 
-type Dim = "categorias" | "areas" | "equipos" | "biens" | "responsables";
+type Dim = "categorias" | "areas" | "equipos" | "biens" | "responsables" | "tipos";
 
 interface Ctx {
   loading: boolean;
