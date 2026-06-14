@@ -115,7 +115,7 @@ export function TopTable({ data }: { data: Movement[] }) {
                   onClick={() => toggleFilter("biens", r.bien)}
                   className={`border-b border-border/40 cursor-pointer transition-colors hover:bg-primary/5 ${active ? "bg-primary/10" : ""}`}
                 >
-                  <td className="py-2 px-2 font-mono tabular-nums text-muted-foreground whitespace-nowrap">{r.fecha || "—"}</td>
+                  <td className="py-2 px-2 font-mono tabular-nums text-muted-foreground whitespace-nowrap">{r.fecha ? r.fecha.split("-").reverse().join("/") : "—"}</td>
                   <td className="py-2 px-2 max-w-[360px] truncate font-medium" title={r.bien}>
                     {r.bien}
                   </td>
