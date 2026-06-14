@@ -31,6 +31,7 @@ function hydrate(p: DataPayload): Movement[] {
     cantidad: r[7],
     costo: r[8],
     unidad: p.unidades?.[r[9]] ?? "",
+    tipo: p.tipos?.[r[10]] ?? "—",
   }));
 }
 
