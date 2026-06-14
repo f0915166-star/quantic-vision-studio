@@ -63,13 +63,14 @@ export function DataProvider({ children, initialData }: { children: ReactNode; i
   }, [embed]);
 
   const filtered = useMemo(() => {
-    const { categorias, areas, equipos, biens, responsables, dateFrom, dateTo } = filters;
+    const { categorias, areas, equipos, biens, responsables, tipos, dateFrom, dateTo } = filters;
     return all.filter(m => {
       if (categorias.size && !categorias.has(m.categoria)) return false;
       if (areas.size && !areas.has(m.area)) return false;
       if (equipos.size && !equipos.has(m.equipo)) return false;
       if (biens.size && !biens.has(m.bien)) return false;
       if (responsables.size && !responsables.has(m.responsable)) return false;
+      if (tipos.size && !tipos.has(m.tipo)) return false;
       if (dateFrom && m.fecha < dateFrom) return false;
       if (dateTo && m.fecha > dateTo) return false;
       return true;
