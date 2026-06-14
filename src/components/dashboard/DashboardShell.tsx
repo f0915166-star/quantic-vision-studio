@@ -71,7 +71,7 @@ export function DashboardShell() {
   }
   if (error) return <div className="p-8 text-destructive">Error: {error}</div>;
 
-  const activeCount = filters.categorias.size + filters.equipos.size + filters.areas.size + filters.biens.size + filters.responsables.size;
+  const activeCount = filters.categorias.size + filters.equipos.size + filters.areas.size + filters.biens.size + filters.responsables.size + filters.tipos.size;
 
   return (
     <div className="min-h-screen">

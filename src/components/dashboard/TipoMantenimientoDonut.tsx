@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 import type { Movement } from "@/lib/data-types";
-import { fmtCurrency, fmtCompact } from "@/lib/data-store";
+import { fmtCurrency, fmtCompact, useData } from "@/lib/data-store";
 import { ChartPanel } from "./ChartPanel";
 import { Wrench } from "lucide-react";
 
@@ -18,6 +18,8 @@ const FALLBACK = [
 ];
 
 export function TipoMantenimientoDonut({ data }: { data: Movement[] }) {
+  const { toggleFilter, filters } = useData();
+  const active = filters.tipos;
   const agg = useMemo(() => {
     const m = new Map<string, { key: string; costo: number; n: number }>();
     for (const r of data) {
@@ -63,9 +65,15 @@ export function TipoMantenimientoDonut({ data }: { data: Movement[] }) {
               paddingAngle={2}
               stroke="var(--color-background)"
               strokeWidth={2}
+              onClick={(d) => toggleFilter("tipos", (d as { key: string }).key)}
+              cursor="pointer"
             >
               {agg.map((d) => (
-                <Cell key={d.key} fill={d.fill} />
+                <Cell
+                  key={d.key}
+                  fill={d.fill}
+                  fillOpacity={active.size === 0 || active.has(d.key) ? 1 : 0.25}
+                />
               ))}
             </Pie>
             <Tooltip
@@ -98,9 +106,13 @@ export function TipoMantenimientoDonut({ data }: { data: Movement[] }) {
       </div>
       <ul className="mt-3 space-y-1.5">
         {agg.map((d) => (
-          <li key={d.key} className="flex items-center gap-2 text-xs">
+          <li
+            key={d.key}
+            onClick={() => toggleFilter("tipos", d.key)}
+            className="flex items-center gap-2 text-xs cursor-pointer group"
+          >
             <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: d.fill }} />
-            <span className="flex-1 truncate font-semibold">{d.key}</span>
+            <span className="flex-1 truncate font-semibold group-hover:text-primary transition-colors">{d.key}</span>
             <span className="tabular-nums text-muted-foreground">{d.pct.toFixed(1)}%</span>
             <span className="tabular-nums text-foreground/80 text-[11px] font-mono">{fmtCurrency(d.costo)}</span>
           </li>

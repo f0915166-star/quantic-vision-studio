@@ -36,6 +36,7 @@ export interface FilterState {
   equipos: Set<string>;
   biens: Set<string>;
   responsables: Set<string>;
+  tipos: Set<string>;
   dateFrom: string | null;
   dateTo: string | null;
 }
@@ -46,10 +47,11 @@ export const emptyFilters = (): FilterState => ({
   equipos: new Set(),
   biens: new Set(),
   responsables: new Set(),
+  tipos: new Set(),
   dateFrom: null,
   dateTo: null,
 });
 
 export const hasAnyFilter = (f: FilterState) =>
-  f.categorias.size + f.areas.size + f.equipos.size + f.biens.size + f.responsables.size > 0 ||
+  f.categorias.size + f.areas.size + f.equipos.size + f.biens.size + f.responsables.size + f.tipos.size > 0 ||
   !!f.dateFrom || !!f.dateTo;

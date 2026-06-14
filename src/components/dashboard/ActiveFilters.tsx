@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "@/lib/data-store";
 import { X, RotateCcw } from "lucide-react";
 
-type Dim = "categorias" | "areas" | "equipos" | "biens" | "responsables";
+type Dim = "categorias" | "areas" | "equipos" | "biens" | "responsables" | "tipos";
 
 export function ActiveFilters() {
   const { filters, toggleFilter, setDateRange, reset } = useData();
@@ -12,6 +12,7 @@ export function ActiveFilters() {
   filters.equipos.forEach((v: string) => items.push({ dim: "equipos", label: "Equipo", value: v }));
   filters.biens.forEach((v: string) => items.push({ dim: "biens", label: "Bien", value: v }));
   filters.responsables.forEach((v: string) => items.push({ dim: "responsables", label: "Responsable", value: v }));
+  filters.tipos.forEach((v: string) => items.push({ dim: "tipos", label: "Tipo", value: v }));
   const hasDate = filters.dateFrom || filters.dateTo;
   const any = items.length > 0 || hasDate;
   if (!any) return null;
