@@ -1,5 +1,5 @@
-// rows: [catIdx, areaIdx, bienIdx, respIdx, equipoIdx, conceptoIdx, fecha, cantidad, costo, unidadIdx]
-export type RawRow = [number, number, number, number, number, number, string, number, number, number];
+// rows: [catIdx, areaIdx, bienIdx, respIdx, equipoIdx, conceptoIdx, fecha, cantidad, costo, unidadIdx, tipoIdx]
+export type RawRow = [number, number, number, number, number, number, string, number, number, number, number];
 
 export interface DataPayload {
   cats: string[];
@@ -9,6 +9,7 @@ export interface DataPayload {
   equipos: string[];
   conceptos: string[];
   unidades: string[];
+  tipos?: string[];
   rows: RawRow[];
   meta?: { generated: string; n: number };
 }
@@ -26,6 +27,7 @@ export interface Movement {
   cantidad: number;
   costo: number;
   unidad: string;
+  tipo: string;
 }
 
 export interface FilterState {
