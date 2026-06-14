@@ -65,9 +65,15 @@ export function TipoMantenimientoDonut({ data }: { data: Movement[] }) {
               paddingAngle={2}
               stroke="var(--color-background)"
               strokeWidth={2}
+              onClick={(d) => toggleFilter("tipos", (d as { key: string }).key)}
+              cursor="pointer"
             >
               {agg.map((d) => (
-                <Cell key={d.key} fill={d.fill} />
+                <Cell
+                  key={d.key}
+                  fill={d.fill}
+                  fillOpacity={active.size === 0 || active.has(d.key) ? 1 : 0.25}
+                />
               ))}
             </Pie>
             <Tooltip
