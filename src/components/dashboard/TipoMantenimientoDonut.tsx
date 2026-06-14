@@ -106,9 +106,13 @@ export function TipoMantenimientoDonut({ data }: { data: Movement[] }) {
       </div>
       <ul className="mt-3 space-y-1.5">
         {agg.map((d) => (
-          <li key={d.key} className="flex items-center gap-2 text-xs">
+          <li
+            key={d.key}
+            onClick={() => toggleFilter("tipos", d.key)}
+            className="flex items-center gap-2 text-xs cursor-pointer group"
+          >
             <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: d.fill }} />
-            <span className="flex-1 truncate font-semibold">{d.key}</span>
+            <span className="flex-1 truncate font-semibold group-hover:text-primary transition-colors">{d.key}</span>
             <span className="tabular-nums text-muted-foreground">{d.pct.toFixed(1)}%</span>
             <span className="tabular-nums text-foreground/80 text-[11px] font-mono">{fmtCurrency(d.costo)}</span>
           </li>
