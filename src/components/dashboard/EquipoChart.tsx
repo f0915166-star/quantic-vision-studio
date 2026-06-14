@@ -7,9 +7,12 @@ import { ChartPanel } from "./ChartPanel";
 import { Truck } from "lucide-react";
 
 // Top equipos móviles por COSTO_TOTAL (combustible + repuestos)
-export function EquipoChart({ data }: { data: Movement[] }) {
-  const { filters, toggleFilter } = useData();
+export function EquipoChart({ data: _data }: { data: Movement[] }) {
+  const { filters, toggleFilter, filteredExcluding } = useData();
   const active = filters.equipos;
+  // Power BI cross-filter: show ALL equipos (respetando otros filtros),
+  // pero resaltar los seleccionados y atenuar el resto.
+  const data = filteredExcluding("equipos");
 
   const agg = useMemo(() => {
     const m = new Map<string, { equipo: string; costo: number; combustible: number; repuestos: number; n: number }>();

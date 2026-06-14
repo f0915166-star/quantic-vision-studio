@@ -16,9 +16,10 @@ const PALETTE = [
   "var(--color-chart-4)",
 ];
 
-export function AreaDonut({ data }: { data: Movement[] }) {
-  const { toggleFilter, filters } = useData();
+export function AreaDonut({ data: _data }: { data: Movement[] }) {
+  const { toggleFilter, filters, filteredExcluding } = useData();
   const active = filters.areas;
+  const data = filteredExcluding("areas");
 
   const agg = useMemo(() => {
     const m = new Map<string, { area: string; costo: number; n: number }>();

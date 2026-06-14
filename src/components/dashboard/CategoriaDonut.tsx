@@ -8,9 +8,10 @@ import { Fuel } from "lucide-react";
 // Mismos colores que EquipoChart: combustible = chart-1, repuestos = chart-3
 // Nota: en la BD "Repuestos" agrupa todas las categorías ≠ COMBUSTIBLE
 // (FILTRO, ACEITE, EPP, etc.), por eso el click setea el filtro como conjunto.
-export function CategoriaDonut({ data, allData }: { data: Movement[]; allData: Movement[] }) {
-  const { setFilter, filters } = useData();
+export function CategoriaDonut({ data: _data, allData }: { data: Movement[]; allData: Movement[] }) {
+  const { setFilter, filters, filteredExcluding } = useData();
   const active = filters.categorias;
+  const data = filteredExcluding("categorias");
 
   // Lista completa de categorías "repuesto" (todas menos COMBUSTIBLE) del universo
   const repuestoCats = useMemo(() => {

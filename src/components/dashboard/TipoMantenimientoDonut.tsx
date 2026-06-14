@@ -17,9 +17,10 @@ const FALLBACK = [
   "var(--color-chart-8)",
 ];
 
-export function TipoMantenimientoDonut({ data }: { data: Movement[] }) {
-  const { toggleFilter, filters } = useData();
+export function TipoMantenimientoDonut({ data: _data }: { data: Movement[] }) {
+  const { toggleFilter, filters, filteredExcluding } = useData();
   const active = filters.tipos;
+  const data = filteredExcluding("tipos");
   const agg = useMemo(() => {
     const m = new Map<string, { key: string; costo: number; n: number }>();
     for (const r of data) {

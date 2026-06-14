@@ -15,6 +15,7 @@ interface Ctx {
   setDateRange: (from: string | null, to: string | null) => void;
   reset: () => void;
   lastUpdated: Date | null;
+  filteredExcluding: (dim: Dim) => Movement[];
 }
 
 const DataCtx = createContext<Ctx | null>(null);
@@ -77,6 +78,21 @@ export function DataProvider({ children, initialData }: { children: ReactNode; i
     });
   }, [all, filters]);
 
+  const filteredExcluding = useCallback((dim: Dim) => {
+    const { categorias, areas, equipos, biens, responsables, tipos, dateFrom, dateTo } = filters;
+    return all.filter(m => {
+      if (dim !== "categorias" && categorias.size && !categorias.has(m.categoria)) return false;
+      if (dim !== "areas" && areas.size && !areas.has(m.area)) return false;
+      if (dim !== "equipos" && equipos.size && !equipos.has(m.equipo)) return false;
+      if (dim !== "biens" && biens.size && !biens.has(m.bien)) return false;
+      if (dim !== "responsables" && responsables.size && !responsables.has(m.responsable)) return false;
+      if (dim !== "tipos" && tipos.size && !tipos.has(m.tipo)) return false;
+      if (dateFrom && m.fecha < dateFrom) return false;
+      if (dateTo && m.fecha > dateTo) return false;
+      return true;
+    });
+  }, [all, filters]);
+
   const toggleFilter = useCallback((dim: Dim, value: string) => {
     setFilters(prev => {
       const next = new Set(prev[dim] as Set<string>);
@@ -96,7 +112,7 @@ export function DataProvider({ children, initialData }: { children: ReactNode; i
   const reset = useCallback(() => setFilters(emptyFilters()), []);
 
   return (
-    <DataCtx.Provider value={{ loading, error, all, filtered, filters, toggleFilter, setFilter, setDateRange, reset, lastUpdated }}>
+    <DataCtx.Provider value={{ loading, error, all, filtered, filters, toggleFilter, setFilter, setDateRange, reset, lastUpdated, filteredExcluding }}>
       {children}
     </DataCtx.Provider>
   );
