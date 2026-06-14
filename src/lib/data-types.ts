@@ -9,6 +9,7 @@ export interface DataPayload {
   equipos: string[];
   conceptos: string[];
   unidades: string[];
+  tipos?: string[];
   rows: RawRow[];
   meta?: { generated: string; n: number };
 }
