@@ -9,6 +9,7 @@ import { ResponsableRanking } from "@/components/dashboard/ResponsableRanking";
 import { EquipoChart } from "@/components/dashboard/EquipoChart";
 import { AreaDonut } from "@/components/dashboard/AreaDonut";
 import { CategoriaDonut } from "@/components/dashboard/CategoriaDonut";
+import { TipoMantenimientoDonut } from "@/components/dashboard/TipoMantenimientoDonut";
 import { TopTable } from "@/components/dashboard/TopTable";
 import { FilterSidebar } from "@/components/dashboard/FilterSidebar";
 import { ChatWidget } from "@/components/dashboard/ChatWidget";
