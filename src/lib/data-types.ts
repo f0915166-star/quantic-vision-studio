@@ -27,6 +27,7 @@ export interface Movement {
   cantidad: number;
   costo: number;
   unidad: string;
+  tipo: string;
 }
 
 export interface FilterState {
