@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 import type { Movement } from "@/lib/data-types";
-import { fmtCurrency, fmtCompact } from "@/lib/data-store";
+import { fmtCurrency, fmtCompact, useData } from "@/lib/data-store";
 import { ChartPanel } from "./ChartPanel";
 import { Wrench } from "lucide-react";
 
