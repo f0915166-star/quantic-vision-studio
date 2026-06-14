@@ -18,6 +18,8 @@ const FALLBACK = [
 ];
 
 export function TipoMantenimientoDonut({ data }: { data: Movement[] }) {
+  const { toggleFilter, filters } = useData();
+  const active = filters.tipos;
   const agg = useMemo(() => {
     const m = new Map<string, { key: string; costo: number; n: number }>();
     for (const r of data) {
