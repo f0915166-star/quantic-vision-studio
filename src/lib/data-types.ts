@@ -1,5 +1,5 @@
-// rows: [catIdx, areaIdx, bienIdx, respIdx, equipoIdx, conceptoIdx, fecha, cantidad, costo, unidadIdx]
-export type RawRow = [number, number, number, number, number, number, string, number, number, number];
+// rows: [catIdx, areaIdx, bienIdx, respIdx, equipoIdx, conceptoIdx, fecha, cantidad, costo, unidadIdx, tipoIdx]
+export type RawRow = [number, number, number, number, number, number, string, number, number, number, number];
 
 export interface DataPayload {
   cats: string[];
