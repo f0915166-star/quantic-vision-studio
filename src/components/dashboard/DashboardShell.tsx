@@ -148,10 +148,14 @@ export function DashboardShell() {
 
         <TrendChart data={filtered} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          <div className="lg:col-span-6"><EquipoChart data={filtered} /></div>
-          <div className="lg:col-span-3"><AreaDonut data={filtered} /></div>
-          <div className="lg:col-span-3"><CategoriaDonut data={filtered} allData={all} /></div>
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
+          <EquipoChart data={filtered} />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <AreaDonut data={filtered} />
+          <CategoriaDonut data={filtered} allData={all} />
+          <TipoMantenimientoDonut data={filtered} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
