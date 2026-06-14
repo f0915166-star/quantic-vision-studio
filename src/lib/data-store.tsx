@@ -15,6 +15,7 @@ interface Ctx {
   setDateRange: (from: string | null, to: string | null) => void;
   reset: () => void;
   lastUpdated: Date | null;
+  filteredExcluding: (dim: Dim) => Movement[];
 }
 
 const DataCtx = createContext<Ctx | null>(null);
