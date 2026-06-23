@@ -30,7 +30,7 @@ export function CategoriaDonut({ data: _data, allData }: { data: Movement[]; all
     const total = combustible + repuestos;
     const arr = [
       { key: "COMBUSTIBLE", label: "Combustible", costo: combustible, n: nC, fill: "var(--color-chart-1)" },
-      { key: "REPUESTOS", label: "Repuestos", costo: repuestos, n: nR, fill: "var(--color-chart-3)" },
+      { key: "REPUESTOS", label: "Otros Bienes", costo: repuestos, n: nR, fill: "var(--color-chart-3)" },
     ];
     return arr.map(x => ({ ...x, pct: total ? (x.costo / total) * 100 : 0 }));
   }, [data]);
