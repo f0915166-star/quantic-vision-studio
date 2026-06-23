@@ -131,7 +131,7 @@ export function EquipoChart({ data: _data }: { data: Movement[] }) {
 
       <div className="flex items-center justify-center gap-4 text-[10px] font-mono text-muted-foreground mt-2">
         <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{background:"var(--color-chart-1)"}}/> Combustible</span>
-        <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{background:"var(--color-chart-3)"}}/> Repuestos</span>
+        <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{background:"var(--color-chart-3)"}}/> Otros Bienes</span>
       </div>
     </ChartPanel>
   );
