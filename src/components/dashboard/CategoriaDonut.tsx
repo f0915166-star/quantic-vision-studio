@@ -62,7 +62,7 @@ export function CategoriaDonut({ data: _data, allData }: { data: Movement[]; all
 
   return (
     <ChartPanel
-      title="Costos: Combustible vs Repuestos"
+      title="Costos: Combustible vs Otros_Bienes"
       
       kicker={<span className="inline-flex items-center gap-1"><Fuel className="w-3 h-3" /> Tipo de gasto</span>}
       exportData={() => ({
