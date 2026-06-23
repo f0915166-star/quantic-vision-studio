@@ -77,7 +77,7 @@ export function EquipoChart({ data: _data }: { data: Movement[] }) {
                   <div className="panel px-3 py-2 text-xs font-mono max-w-xs">
                     <div className="font-semibold mb-1 break-words text-foreground">{p.equipo}</div>
                     <div className="flex justify-between gap-6"><span style={{color:"var(--color-chart-1)"}}>● Combustible</span><span>{fmtCurrency(p.combustible)}</span></div>
-                    <div className="flex justify-between gap-6"><span style={{color:"var(--color-chart-3)"}}>● Repuestos</span><span>{fmtCurrency(p.repuestos)}</span></div>
+                    <div className="flex justify-between gap-6"><span style={{color:"var(--color-chart-3)"}}>● Otros Bienes</span><span>{fmtCurrency(p.repuestos)}</span></div>
                     <div className="border-t border-border mt-1 pt-1 flex justify-between gap-6"><span>Total</span><span className="text-foreground font-semibold">{fmtCurrency(p.costo)}</span></div>
                     <div className="flex justify-between gap-6 text-muted-foreground"><span>% Combust.</span><span>{pctC.toFixed(1)}%</span></div>
                     <div className="flex justify-between gap-6 text-muted-foreground"><span>Movs</span><span>{p.n}</span></div>
@@ -131,7 +131,7 @@ export function EquipoChart({ data: _data }: { data: Movement[] }) {
 
       <div className="flex items-center justify-center gap-4 text-[10px] font-mono text-muted-foreground mt-2">
         <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{background:"var(--color-chart-1)"}}/> Combustible</span>
-        <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{background:"var(--color-chart-3)"}}/> Repuestos</span>
+        <span className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-sm" style={{background:"var(--color-chart-3)"}}/> Otros Bienes</span>
       </div>
     </ChartPanel>
   );
