@@ -4,6 +4,12 @@ import { createRoot } from "react-dom/client";
 import { DataProvider } from "@/lib/data-store";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import type { DataPayload } from "@/lib/data-types";
+import bundledData from "../public/data/consolidado.json";
+
+// Data embebida al build — sin fetch, funciona con file://
+if (typeof window !== "undefined" && !window.__EMBED_DATA__) {
+  window.__EMBED_DATA__ = bundledData as unknown as DataPayload;
+}
 
 declare global {
   interface Window {
